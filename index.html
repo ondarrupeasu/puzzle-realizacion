@@ -183,9 +183,11 @@ const STR = {
     meta_conv:"€ · toca cámara o entrada", meta_ramp:"€ · toca un pasillo (lo comparten varias cámaras)", meta_rx:"toca cerca de la cámara inalámbrica (dentro del alcance RF)",
     dec_name:"Decimator", meta_dec:"€ · toca una cámara (invierte HD↔4K)",
     hint:`Elige el <b>tipo de cable</b> y arrastra desde el <b>objetivo</b> de la cámara a una <b>entrada</b> de la mesa. <b>Tira del cable</b> para curvarlo (suma metros); rodea las butacas (los pasillos se cruzan libres). Si el nivel trae conversores, colócalos tocando cámara o entrada — ojo al sentido. El juego <b>no te avisa</b> si algo no encaja: pulsa <b>Ya lo tengo</b> para validar. Pellizca para acercar.`,
+    hint_exit:`⛔ <b>Vía de evacuación</b> (roja): normativa de seguridad. El cable <b>no la cruza nunca</b>, ni con pasacables — rodéala. Tampoco se coloca ahí una cámara ni un receptor.`,
     m_notconn:n=>`${n}: sin conectar a la mesa.`,
     m_hard:n=>`${n}: el cable cruza las butacas, el foso u otro obstáculo.`,
     m_aisle:n=>`${n}: el cable cruza un pasillo sin pasacables (cable pisable).`,
+    m_exit:n=>`${n}: el cable invade una vía de evacuación. Prohibido por normativa: no se cruza NUNCA, ni con pasacables.`,
     m_len:(n,l,c,lim)=>`${n}: ${l} m con ${c} supera su límite de ${lim} m.`,
     m_convcam:(n,cv,f,o)=>`${n}: el conversor ${cv} espera ${f}, pero la cámara saca ${o} — sentido equivocado.`,
     m_convin:(n,cv,to,mf)=>`${n}: el conversor ${cv} de la entrada saca ${to}, pero la mesa necesita ${mf} — sentido equivocado.`,
@@ -199,7 +201,7 @@ const STR = {
     w_ok:n=>`Las ${n} cámaras entregan señal dentro de presupuesto.`,
     w_cost:(c,tt,cv)=>`Coste: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} conversores.`,
     w_score:s=>`Puntuación (presupuesto restante): <b style="color:var(--txt)">${s} €</b>.`,
-    labels:{ "ESCENARIO":"ESCENARIO","FOSO":"FOSO","BUTACAS":"BUTACAS","PASILLO CENTRAL":"PASILLO CENTRAL","PASILLO":"PASILLO","COLUMNA":"COLUMNA","TORRE PA":"TORRE PA","BARRERA":"BARRERA","PÚBLICO (DE PIE)":"PÚBLICO (DE PIE)","DECORADO / SET":"DECORADO / SET","MESA PLATÓ":"MESA PLATÓ","FOCO":"FOCO","CABINA":"CABINA","CONTROL":"CONTROL" },
+    labels:{ "ESCENARIO":"ESCENARIO","FOSO":"FOSO","BUTACAS":"BUTACAS","PASILLO CENTRAL":"PASILLO CENTRAL","PASILLO":"PASILLO","COLUMNA":"COLUMNA","TORRE PA":"TORRE PA","BARRERA":"BARRERA","PÚBLICO (DE PIE)":"PÚBLICO (DE PIE)","DECORADO / SET":"DECORADO / SET","MESA PLATÓ":"MESA PLATÓ","FOCO":"FOCO","CABINA":"CABINA","CONTROL":"CONTROL","SALIDA DE EMERGENCIA":"SALIDA DE EMERGENCIA","VÍA DE EVACUACIÓN":"VÍA DE EVACUACIÓN","SALIDA":"SALIDA" },
     cables:{ "Fibra":"Fibra" },
     venues:{ teatro:"Teatro", concierto:"Concierto", setTV:"Set de TV" },
   },
@@ -216,9 +218,11 @@ const STR = {
     meta_conv:"€ · tap a camera or input", meta_ramp:"€ · tap an aisle (shared by cameras)", meta_rx:"tap near the wireless camera (within RF range)",
     dec_name:"Decimator", meta_dec:"€ · tap a camera (flips HD↔4K)",
     hint:`Pick a <b>cable type</b> and drag from the camera's <b>output</b> to a desk <b>input</b>. <b>Pull the cable</b> to bend it (adds metres); route around the seating (aisles are free to cross). If the level has converters, place them by tapping a camera or input — mind the direction. The game <b>won't warn you</b> if something doesn't fit: press <b>I'm done</b> to validate. Pinch to zoom.`,
+    hint_exit:`⛔ <b>Escape route</b> (red): safety regulation. The cable <b>never</b> crosses it, not even with a ramp — route around. No camera or receiver may sit there either.`,
     m_notconn:n=>`${n}: not connected to the desk.`,
     m_hard:n=>`${n}: the cable crosses the seating, the pit or another obstacle.`,
     m_aisle:n=>`${n}: the cable crosses an aisle with no cable ramp (trip hazard).`,
+    m_exit:n=>`${n}: the cable blocks an escape route. Forbidden by regulation: NEVER cross it, not even with a cable ramp.`,
     m_len:(n,l,c,lim)=>`${n}: ${l} m of ${c} exceeds its ${lim} m limit.`,
     m_convcam:(n,cv,f,o)=>`${n}: the ${cv} converter expects ${f}, but the camera outputs ${o} — wrong direction.`,
     m_convin:(n,cv,to,mf)=>`${n}: the ${cv} converter at the input outputs ${to}, but the desk needs ${mf} — wrong direction.`,
@@ -232,7 +236,7 @@ const STR = {
     w_ok:n=>`All ${n} cameras deliver signal within budget.`,
     w_cost:(c,tt,cv)=>`Cost: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} converters.`,
     w_score:s=>`Score (budget left): <b style="color:var(--txt)">${s} €</b>.`,
-    labels:{ "ESCENARIO":"STAGE","FOSO":"PIT","BUTACAS":"SEATING","PASILLO CENTRAL":"CENTER AISLE","PASILLO":"AISLE","COLUMNA":"COLUMN","TORRE PA":"PA TOWER","BARRERA":"BARRIER","PÚBLICO (DE PIE)":"STANDING CROWD","DECORADO / SET":"SET","MESA PLATÓ":"PRESENTER DESK","FOCO":"FLOOR LIGHT","CABINA":"BOOTH","CONTROL":"CONTROL ROOM" },
+    labels:{ "ESCENARIO":"STAGE","FOSO":"PIT","BUTACAS":"SEATING","PASILLO CENTRAL":"CENTER AISLE","PASILLO":"AISLE","COLUMNA":"COLUMN","TORRE PA":"PA TOWER","BARRERA":"BARRIER","PÚBLICO (DE PIE)":"STANDING CROWD","DECORADO / SET":"SET","MESA PLATÓ":"PRESENTER DESK","FOCO":"FLOOR LIGHT","CABINA":"BOOTH","CONTROL":"CONTROL ROOM","SALIDA DE EMERGENCIA":"EMERGENCY EXIT","VÍA DE EVACUACIÓN":"ESCAPE ROUTE","SALIDA":"EXIT" },
     cables:{ "Fibra":"Fiber" },
     venues:{ teatro:"Theatre", concierto:"Concert", setTV:"TV Set" },
   },
@@ -249,9 +253,11 @@ const STR = {
     meta_conv:"€ · ukitu kamera bat edo sarrera bat", meta_ramp:"€ · ukitu korridore bat (kamerek partekatzen dute)", meta_rx:"ukitu haririk gabeko kameratik gertu (RF irismenaren barruan)",
     dec_name:"Decimator", meta_dec:"€ · ukitu kamera bat (HD↔4K trukatzen du)",
     hint:`Aukeratu <b>kable mota</b> eta arrastatu kameraren <b>objektibotik</b> mahaiaren <b>sarrera</b> batera. <b>Tira egin kableari</b> okertzeko (metroak batzen ditu); saihestu besaulkiak (korridoreak libre gurutza daitezke). Mailak bihurgailuak baditu, jarri kamera edo sarrera ukituz — kontuz noranzkoarekin. Jokoak <b>ez dizu abisatzen</b> zerbait ondo ez badago: sakatu <b>Prest nago</b> balidatzeko. Atximurkatu gerturatzeko.`,
+    hint_exit:`⛔ <b>Ebakuazio-bidea</b> (gorria): segurtasun-araudia. Kableak <b>ez du inoiz gurutzatzen</b>, ezta arrapalarekin ere — saihestu. Ezin da han kamerarik ez hargailurik jarri.`,
     m_notconn:n=>`${n}: mahaira konektatu gabe.`,
     m_hard:n=>`${n}: kableak besaulkiak, hobia edo beste oztopo bat gurutzatzen du.`,
     m_aisle:n=>`${n}: kableak korridore bat gurutzatzen du kable-arrapalarik gabe (oinazpiko kablea).`,
+    m_exit:n=>`${n}: kableak ebakuazio-bide bat inbaditzen du. Araudiak debekatuta: EZ da INOIZ gurutzatzen, ezta kable-arrapalarekin ere.`,
     m_len:(n,l,c,lim)=>`${n}: ${c} kablearen ${l} m-k ${lim} m-ko muga gainditzen du.`,
     m_convcam:(n,cv,f,o)=>`${n}: ${cv} bihurgailuak ${f} espero du, baina kamerak ${o} ematen du — noranzko okerra.`,
     m_convin:(n,cv,to,mf)=>`${n}: sarrerako ${cv} bihurgailuak ${to} ematen du, baina mahaiak ${mf} behar du — noranzko okerra.`,
@@ -265,7 +271,7 @@ const STR = {
     w_ok:n=>`${n} kamerek seinalea ematen dute aurrekontuaren barruan.`,
     w_cost:(c,tt,cv)=>`Kostua: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} bihurgailu.`,
     w_score:s=>`Puntuazioa (gelditzen den aurrekontua): <b style="color:var(--txt)">${s} €</b>.`,
-    labels:{ "ESCENARIO":"OHOLTZA","FOSO":"HOBIA","BUTACAS":"BESAULKIAK","PASILLO CENTRAL":"ERDIKO KORRIDOREA","PASILLO":"KORRIDOREA","COLUMNA":"ZUTABEA","TORRE PA":"PA DORREA","BARRERA":"HESIA","PÚBLICO (DE PIE)":"JENDEA (ZUTIK)","DECORADO / SET":"DEKORATUA / SETA","MESA PLATÓ":"PLATOKO MAHAIA","FOCO":"FOKUA","CABINA":"KABINA","CONTROL":"KONTROLA" },
+    labels:{ "ESCENARIO":"OHOLTZA","FOSO":"HOBIA","BUTACAS":"BESAULKIAK","PASILLO CENTRAL":"ERDIKO KORRIDOREA","PASILLO":"KORRIDOREA","COLUMNA":"ZUTABEA","TORRE PA":"PA DORREA","BARRERA":"HESIA","PÚBLICO (DE PIE)":"JENDEA (ZUTIK)","DECORADO / SET":"DEKORATUA / SETA","MESA PLATÓ":"PLATOKO MAHAIA","FOCO":"FOKUA","CABINA":"KABINA","CONTROL":"KONTROLA","SALIDA DE EMERGENCIA":"LARRIALDIKO IRTEERA","VÍA DE EVACUACIÓN":"EBAKUAZIO-BIDEA","SALIDA":"IRTEERA" },
     cables:{ "Fibra":"Zuntza" },
     venues:{ teatro:"Antzokia", concierto:"Kontzertua", setTV:"TB Platoa" },
   },
@@ -362,9 +368,9 @@ const TEATRO_N2 = {
 
 const TEATRO_N3 = {
   nombre:  { es:"Teatro · Nivel 3", en:"Theatre · Level 3", eu:"Antzokia · 3. maila" },
-  encargo: { es:"Producción grande y mixta: SDI, una mirrorless HDMI y una PTZ por IP. La mesa trae una entrada IP (IN3): la PTZ entra por Ethernet directa. Las del frente necesitan FIBRA por distancia; ojo al sentido de los conversores y al presupuesto.",
-             en:"Big mixed production: SDI, an HDMI mirrorless and an IP PTZ. The desk has an IP input (IN3): the PTZ goes in over Ethernet directly. The front ones need FIBRE due to distance; mind converter direction and the budget.",
-             eu:"Ekoizpen handi eta mistoa: SDI, HDMI mirrorless bat eta IP PTZ bat. Mahaiak IP sarrera bat du (IN3): PTZ Ethernet bidez zuzenean sartzen da. Aurrekoek ZUNTZA behar dute distantziagatik; kontuz bihurgailuen noranzkoarekin eta aurrekontuarekin." },
+  encargo: { es:"Producción grande y mixta: SDI, una mirrorless HDMI y una PTZ por IP. La mesa trae una entrada IP (IN3): la PTZ entra por Ethernet directa. Las del frente necesitan FIBRA por distancia; ojo al sentido de los conversores y al presupuesto. Y hay una vía de evacuación señalizada: el cable no la cruza nunca.",
+             en:"Big mixed production: SDI, an HDMI mirrorless and an IP PTZ. The desk has an IP input (IN3): the PTZ goes in over Ethernet directly. The front ones need FIBRE due to distance; mind converter direction and the budget. And there's a marked escape route: the cable never crosses it.",
+             eu:"Ekoizpen handi eta mistoa: SDI, HDMI mirrorless bat eta IP PTZ bat. Mahaiak IP sarrera bat du (IN3): PTZ Ethernet bidez zuzenean sartzen da. Aurrekoek ZUNTZA behar dute distantziagatik; kontuz bihurgailuen noranzkoarekin eta aurrekontuarekin. Eta ebakuazio-bide bat dago seinalizatuta: kableak ez du inoiz gurutzatzen." },
   planoM:  { w:150, h:80 },
   escalaPxM: 7,
   mesa: { x:140, y:40, inputs:["sdi","sdi","ip","sdi"], faces:"left" },   // la mesa trae una entrada IP
@@ -374,7 +380,9 @@ const TEATRO_N3 = {
     { id:"CAM 3", x:126, y:22, out:"ip"   },   // fondo, PTZ → Ethernet directo a la entrada IP
     { id:"CAM 4", x:126, y:56, out:"sdi"  },   // fondo → SDI
   ],
-  zones: TEATRO_ZONAS_2,
+  zones: [ ...TEATRO_ZONAS_2,
+    { shape:"rect", kind:"exit", x:126, y:52, w:12, h:6, label:"SALIDA" },   // vía de evacuación: cruza el pasillo lateral hacia la puerta
+  ],
   rampEur: 120, rampW: 6,
   cableTypes: {
     sdi:   { nombre:"HD-SDI",   signal:"sdi",  limite:100, eurM:3,   conv:0, color:"--cyan"  },
@@ -428,9 +436,9 @@ const CONCIERTO_N1 = {
 
 const CONCIERTO_N2 = {
   nombre:  { es:"Concierto · Nivel 2", en:"Concert · Level 2", eu:"Kontzertua · 2. maila" },
-  encargo: { es:"Entra una cámara inalámbrica (steadicam en el foso): no sale cable de ella. Coloca su receptor (RX) dentro del alcance RF y cablea desde el RX a la cabina. El resto de cámaras, como antes.",
-             en:"A wireless camera joins (steadicam in the pit): no cable comes off it. Place its receiver (RX) within RF range and cable from the RX to the booth. The rest of the cameras, as before.",
-             eu:"Haririk gabeko kamera bat gehitzen da (steadicam-a hobian): ez zaio kablerik ateratzen. Jarri bere hartzailea (RX) RF irismenaren barruan eta kableatu RXtik kabinara. Gainerako kamerak, lehen bezala." },
+  encargo: { es:"Entra una cámara inalámbrica (steadicam en el foso): no sale cable de ella. Coloca su receptor (RX) dentro del alcance RF y cablea desde el RX a la cabina. El resto de cámaras, como antes. Cuidado con la vía de evacuación: ni el cable ni el RX pueden ocuparla.",
+             en:"A wireless camera joins (steadicam in the pit): no cable comes off it. Place its receiver (RX) within RF range and cable from the RX to the booth. The rest of the cameras, as before. Mind the escape route: neither the cable nor the RX may sit on it.",
+             eu:"Haririk gabeko kamera bat gehitzen da (steadicam-a hobian): ez zaio kablerik ateratzen. Jarri bere hartzailea (RX) RF irismenaren barruan eta kableatu RXtik kabinara. Gainerako kamerak, lehen bezala. Kontuz ebakuazio-bidearekin: ez kableak ez RXak ezin dute hura okupatu." },
   planoM:  { w:150, h:90 },
   escalaPxM: 7.5,
   mesa: { x:138, y:45, inputs:4, inFmt:"sdi", faces:"left" },
@@ -447,6 +455,7 @@ const CONCIERTO_N2 = {
     { shape:"circle", kind:"column",  x:60,  y:10, r:3, label:"TORRE PA" },
     { shape:"circle", kind:"column",  x:60,  y:80, r:3, label:"TORRE PA" },
     { shape:"rect",   kind:"walk",    x:126, y:45, w:8,  h:74, label:"PASILLO" },
+    { shape:"rect",   kind:"exit",    x:123, y:58, w:14, h:6, label:"SALIDA" },   // vía de evacuación hacia la puerta lateral
   ],
   rampEur: 120, rampW: 6,
   cableTypes: {
@@ -520,9 +529,9 @@ const SETTV_N2 = {
 
 const SETTV_N3 = {
   nombre:  { es:"Set de TV · Nivel 3", en:"TV Set · Level 3", eu:"TB Platoa · 3. maila" },
-  encargo: { es:"Plató mayor con mesa SDI y control en SALA APARTE: decorado y mesa arriba, cámaras abajo apuntando al set. Lleva cada cámara al patch de pared (a la derecha); los focos de suelo no estorban al cable.",
-             en:"Larger studio with an SDI desk and the gallery in a SEPARATE ROOM: set and desk at the top, cameras below aiming at the set. Take each camera to the wall patch (on the right); floor lights don't get in the cable's way.",
-             eu:"Plato handiagoa SDI mahaiarekin eta kontrola BESTE GELA batean: dekoratua eta mahaia goian, kamerak behean set-era begira. Eraman kamera bakoitza hormako patchera (eskuinean); lurreko fokuek ez diote kableari trabarik egiten." },
+  encargo: { es:"Plató mayor con mesa SDI y control en SALA APARTE: decorado y mesa arriba, cámaras abajo apuntando al set. Lleva cada cámara al patch de pared (a la derecha); los focos de suelo no estorban al cable. La vía de evacuación del plató, en cambio, es intocable: rodéala por arriba.",
+             en:"Larger studio with an SDI desk and the gallery in a SEPARATE ROOM: set and desk at the top, cameras below aiming at the set. Take each camera to the wall patch (on the right); floor lights don't get in the cable's way. The studio escape route, however, is untouchable: route around it from above.",
+             eu:"Plato handiagoa SDI mahaiarekin eta kontrola BESTE GELA batean: dekoratua eta mahaia goian, kamerak behean set-era begira. Eraman kamera bakoitza hormako patchera (eskuinean); lurreko fokuek ez diote kableari trabarik egiten. Platoko ebakuazio-bidea, ordea, ukiezina da: saihestu goitik." },
   planoM:  { w:92, h:66 },
   escalaPxM: 10.5,
   mesa: { x:82, y:30, inputs:3, inFmt:"sdi", faces:"left", label:"CONTROL" },
@@ -536,6 +545,7 @@ const SETTV_N3 = {
     { shape:"rect",   kind:"seating", x:40, y:27, w:30, h:8,  label:"MESA PLATÓ" },
     { shape:"circle", kind:"decor",   x:34, y:41, r:2.5, label:"FOCO" },
     { shape:"circle", kind:"decor",   x:58, y:43, r:2.5, label:"FOCO" },
+    { shape:"rect",   kind:"exit",    x:70, y:50, w:6, h:32, label:"SALIDA" },   // vía de evacuación del plató hasta la puerta
   ],
   rampEur: 120, rampW: 6,
   cableTypes: {
@@ -654,8 +664,9 @@ function segCircle(a,b,c,r){
   let t=((c.x-a.x)*dx+(c.y-a.y)*dy)/l2; t=Math.max(0,Math.min(1,t));
   return Math.hypot(a.x+t*dx-c.x, a.y+t*dy-c.y)<=r;
 }
+const ZEPS=0.05;                                   // holgura (m): rozar el borde exacto de una zona no cuenta como cruce
 function segRect(a,b,o){
-  const x0=o.x-o.w/2,x1=o.x+o.w/2,y0=o.y-o.h/2,y1=o.y+o.h/2;
+  const x0=o.x-o.w/2+ZEPS,x1=o.x+o.w/2-ZEPS,y0=o.y-o.h/2+ZEPS,y1=o.y+o.h/2-ZEPS;
   const inside=p=>p.x>=x0&&p.x<=x1&&p.y>=y0&&p.y<=y1;
   if(inside(a)||inside(b))return true;
   const ss=(p,q,r,s)=>{
@@ -668,14 +679,24 @@ function segRect(a,b,o){
   return ss(a,b,c[0],c[1])||ss(a,b,c[1],c[2])||ss(a,b,c[2],c[3])||ss(a,b,c[3],c[0]);
 }
 function zoneBlock(z){                             // cómo se comporta cada zona ante el cable
+  if(z.kind==="exit") return "forbid";             // vía de evacuación: normativa, NUNCA cruzable (ni con pasacables)
   if(z.kind==="aisle") return "ramp";              // cruzable con pasacables (de momento sin usar)
   if(z.kind==="stage"||z.kind==="walk"||z.kind==="decor") return "none";  // decor / pasillo libre: no bloquea (p.ej. focos de suelo)
   return "hard";                                   // pit, seating, wall, column…
 }
 
-function inHardZone(x,y){                          // ¿el punto cae en zona no pisable (público, foso, muro)?
+function inForbidZone(x,y){                        // ¿el punto cae en una vía de evacuación?
   for(const z of (LEVEL.zones||[])){
-    if(zoneBlock(z)!=="hard")continue;
+    if(zoneBlock(z)!=="forbid")continue;
+    if(z.shape==="circle"){ if(Math.hypot(x-z.x,y-z.y)<=(z.r||z.w/2))return true; }
+    else if(x>=z.x-z.w/2&&x<=z.x+z.w/2&&y>=z.y-z.h/2&&y<=z.y+z.h/2)return true;
+  }
+  return false;
+}
+
+function inHardZone(x,y){                          // ¿el punto cae en zona no pisable (público, foso, muro, vía de evacuación)?
+  for(const z of (LEVEL.zones||[])){
+    const b=zoneBlock(z); if(b!=="hard"&&b!=="forbid")continue;
     if(z.shape==="circle"){ if(Math.hypot(x-z.x,y-z.y)<=(z.r||z.w/2))return true; }
     else if(x>=z.x-z.w/2&&x<=z.x+z.w/2&&y>=z.y-z.h/2&&y<=z.y+z.h/2)return true;
   }
@@ -700,6 +721,10 @@ const gPorts=el("g",{},content);
    ============================================================ */
 function drawStatic(){
   gStatic.innerHTML=""; gPorts.innerHTML=""; gTemp.innerHTML="";
+  const defs=el("defs",{},gStatic);                                  // rayado de las vías de evacuación
+  const pat=el("pattern",{id:"hatchExit",width:8,height:8,patternUnits:"userSpaceOnUse",patternTransform:"rotate(45)"},defs);
+  el("rect",{x:0,y:0,width:8,height:8,fill:css("--red"),opacity:.13},pat);
+  el("line",{x1:0,y1:0,x2:0,y2:8,stroke:css("--red"),"stroke-width":2.6,opacity:.42},pat);
   el("rect",{x:0,y:0,width:m(LEVEL.planoM.w),height:m(LEVEL.planoM.h),fill:css("--bg")},gStatic);
   for(let x=0;x<=LEVEL.planoM.w;x+=10)
     el("line",{x1:m(x),y1:0,x2:m(x),y2:m(LEVEL.planoM.h),stroke:css("--grid"),"stroke-width":1},gStatic);
@@ -717,12 +742,19 @@ function drawStatic(){
     let fill="rgba(92,107,103,.12)", stroke=css("--dim"), dash=null, lbl=css("--dim");
     if(z.kind==="stage"){ fill="none"; stroke=css("--cyan"); lbl=css("--cyan"); }
     else if(z.kind==="aisle"||z.kind==="walk"){ fill="none"; stroke=css("--line"); dash="4 6"; lbl=css("--dim"); }  // pasillo neutro
+    else if(z.kind==="exit"){ fill="url(#hatchExit)"; stroke=css("--red"); dash="7 4"; lbl=css("--red"); }              // vía de evacuación: intocable
     const a={x:m(z.x-z.w/2),y:m(z.y-z.h/2),width:m(z.w),height:m(z.h),rx:3,fill:fill,stroke:stroke,"stroke-width":1.4};
     if(dash)a["stroke-dasharray"]=dash;
     el("rect",a,gStatic);
     if(z.label){
-      const t=el("text",{x:m(z.x),y:m(z.y)+3,fill:lbl,"font-size":11,"letter-spacing":"2","text-anchor":"middle"},gStatic);
-      t.textContent=tl(z.label);
+      const ta={x:m(z.x),y:m(z.y)+3,fill:lbl,"font-size":11,"letter-spacing":"2","text-anchor":"middle"};
+      if(z.kind==="exit"){                                   // la vía es estrecha: el rótulo va fuera, sin tapar el plano
+        ta["font-size"]=9.5;
+        if(z.h>z.w*1.5) ta.transform=`rotate(-90 ${m(z.x)} ${m(z.y)})`;
+        else ta.y=m(z.y-z.h/2)-5;
+      }
+      const t=el("text",ta,gStatic);
+      t.textContent=(z.kind==="exit"?"⛔ ":"")+tl(z.label);
     }
   });
 
@@ -804,7 +836,13 @@ function crossAisleBare(ci){
   }
   return false;
 }
-function cableCross(ci){ return crossHard(ci)||crossAisleBare(ci); }
+function crossForbid(ci){                           // vía de evacuación: ni rozarla
+  const p=pathPoints(ci);
+  for(let i=0;i<p.length-1;i++) for(const z of (LEVEL.zones||[]))
+    if(zoneBlock(z)==="forbid" && (z.shape==="circle"?segCircle(p[i],p[i+1],z,z.r):segRect(p[i],p[i+1],z))) return true;
+  return false;
+}
+function cableCross(ci){ return crossHard(ci)||crossForbid(ci)||crossAisleBare(ci); }
 
 function redrawCables(){
   gCables.innerHTML="";
@@ -963,7 +1001,7 @@ svg.addEventListener("pointerdown",e=>{
     const p=toSvg(e), mx=p.x/S, my=p.y/S;
     let ci=-1,bd=1e9;
     cams.forEach((c,i)=>{ if(c.wireless){ const d=Math.hypot(mx-c.x,my-c.y); if(d<bd){bd=d;ci=i;} } });
-    if(ci>=0){ rx[ci]={x:mx,y:my}; redrawCables(); updateHUD(); return; }
+    if(ci>=0){ if(!inForbidZone(mx,my)){ rx[ci]={x:mx,y:my}; redrawCables(); updateHUD(); } return; }
     drag={kind:"pan",sx:e.clientX,sy:e.clientY,tx0:zoom.tx,ty0:zoom.ty}; return;
   }
   if(mode==="dec"){                                     // poner/quitar Decimator en la cámara más cercana
@@ -1071,6 +1109,7 @@ function validate(){
     if(!c){ problemas.push(tr('m_notconn')(name)); return; }
     const ct=LEVEL.cableTypes[c.type], len=pathLen(ci);
     if(crossHard(ci)) problemas.push(tr('m_hard')(name));
+    if(crossForbid(ci)) problemas.push(tr('m_exit')(name));
     if(crossAisleBare(ci)) problemas.push(tr('m_aisle')(name));
     if(len>ct.limite) problemas.push(tr('m_len')(name, len.toFixed(0), tcable(ct.nombre), ct.limite));
     const cvc=camConv[ci]&&LEVEL.converters[camConv[ci]];
@@ -1199,7 +1238,7 @@ function cargarNivel(vid,idx){
   document.getElementById("nivel").textContent=pick(LEVEL.nombre);
   document.getElementById("encargo").textContent=pick(LEVEL.encargo);
   document.getElementById("win").classList.remove("show");
-  buildInv(); drawStatic(); redrawCables(); updateHUD();
+  buildInv(); drawStatic(); redrawCables(); updateHUD(); updateHint();
   document.getElementById("menu").classList.remove("show");
 }
 function reset(){
@@ -1212,9 +1251,13 @@ function reset(){
   redrawCables(); updateHUD();
 }
 
+function updateHint(){                          // el aviso de normativa solo sale si el nivel tiene vía de evacuación
+  const hasExit=((LEVEL&&LEVEL.zones)||[]).some(z=>zoneBlock(z)==="forbid");
+  document.getElementById("hint").innerHTML=tr("hint")+(hasExit?" "+tr("hint_exit"):"");
+}
 function applyLang(){
   document.querySelectorAll("[data-i18n]").forEach(e=>{ e.textContent=tr(e.dataset.i18n); });
-  document.getElementById("hint").innerHTML=tr("hint");
+  updateHint();
   document.querySelectorAll(".langbtn").forEach(b=>b.classList.toggle("on", b.dataset.lang===LANG));
   buildMenu();
   if(LEVEL){                                   // re-renderiza el nivel cargado en el nuevo idioma
