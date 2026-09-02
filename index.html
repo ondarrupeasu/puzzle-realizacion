@@ -199,7 +199,7 @@ const STR = {
     hint_shot:`🎥 <b>Encuadres</b>: toca una cámara para seleccionarla, <b>arrastra el tirador</b> de su cono para orientarla y muévela dentro de su área. La óptica abre o cierra el ángulo: el <b>ancho de campo</b> que ves depende de la distancia y del objetivo. Planos: <b>PP</b> ≤0,7 m · <b>PM</b> ≤1,3 · <b>PA</b> ≤1,9 · <b>PE</b> ≤3 · <b>PG</b> >3.`,
     valid_k_shot:"ENCUADRES CORRECTOS", invalid_k_shot:"REVISA LOS ENCUADRES",
     valid_h_shot:"Pauta cumplida ✓", invalid_h_shot:"Hay planos que no cuadran",
-    valid_k_mix:"PLATÓ RESUELTO", invalid_k_mix:"REVISA EL PLATÓ",
+    valid_k_mix:"REALIZACIÓN LISTA", invalid_k_mix:"REVISA LA REALIZACIÓN",
     valid_h_mix:"Encuadres y señal ✓", invalid_h_mix:"Hay fallos de encuadre o de señal",
     axis_lbl:"EJE DE ACCIÓN",
     hint_axis:`↔️ <b>Eje de acción</b> (línea ámbar): todas las cámaras del mismo lado que el plano general. Si una lo cruza, en el corte los personajes cambian de lado. Y ninguna cámara debe aparecer en el encuadre de otra.`,
@@ -232,7 +232,7 @@ const STR = {
     w_ok:n=>`Las ${n} cámaras entregan señal dentro de presupuesto.`,
     w_cost:(c,tt,cv)=>`Coste: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} conversores.`,
     w_score:s=>`Puntuación (presupuesto restante): <b style="color:var(--txt)">${s} €</b>.`,
-    labels:{ "ESCENARIO":"ESCENARIO","FOSO":"FOSO","BUTACAS":"BUTACAS","PASILLO CENTRAL":"PASILLO CENTRAL","PASILLO":"PASILLO","COLUMNA":"COLUMNA","TORRE PA":"TORRE PA","TORRE FOH":"TORRE FOH","BARRERA":"BARRERA","PÚBLICO (DE PIE)":"PÚBLICO (DE PIE)","DECORADO / SET":"DECORADO / SET","MESA PLATÓ":"MESA PLATÓ","FOCO":"FOCO","CABINA":"CABINA","CONTROL":"CONTROL","SALIDA DE EMERGENCIA":"SALIDA DE EMERGENCIA","VÍA DE EVACUACIÓN":"VÍA DE EVACUACIÓN","SALIDA":"SALIDA","PRESENTADORA":"PRESENTADORA","INVITADO":"INVITADO","Gran angular":"Gran angular","Normal":"Normal","Tele":"Tele","Tele largo":"Tele largo" },
+    labels:{ "ESCENARIO":"ESCENARIO","FOSO":"FOSO","BUTACAS":"BUTACAS","PASILLO CENTRAL":"PASILLO CENTRAL","PASILLO":"PASILLO","COLUMNA":"COLUMNA","TORRE PA":"TORRE PA","TORRE FOH":"TORRE FOH","BARRERA":"BARRERA","PÚBLICO (DE PIE)":"PÚBLICO (DE PIE)","DECORADO / SET":"DECORADO / SET","MESA PLATÓ":"MESA PLATÓ","FOCO":"FOCO","CABINA":"CABINA","CONTROL":"CONTROL","SOLISTA":"SOLISTA","PIANISTA":"PIANISTA","Tele largo":"Tele largo","Súper tele":"Súper tele","Zoom 90x":"Zoom 90x","SALIDA DE EMERGENCIA":"SALIDA DE EMERGENCIA","VÍA DE EVACUACIÓN":"VÍA DE EVACUACIÓN","SALIDA":"SALIDA","PRESENTADORA":"PRESENTADORA","INVITADO":"INVITADO","Gran angular":"Gran angular","Normal":"Normal","Tele":"Tele","Tele largo":"Tele largo" },
     cables:{ "Fibra":"Fibra" },
     venues:{ teatro:"Teatro", concierto:"Concierto", setTV:"Set de TV" },
   },
@@ -254,7 +254,7 @@ const STR = {
     hint_shot:`🎥 <b>Framing</b>: tap a camera to select it, <b>drag the handle</b> on its cone to aim it, and move it inside its area. The lens opens or closes the angle: the <b>field width</b> you see depends on distance and lens. Shots: <b>CU</b> ≤0.7 m · <b>MS</b> ≤1.3 · <b>MLS</b> ≤1.9 · <b>FS</b> ≤3 · <b>WS</b> >3.`,
     valid_k_shot:"FRAMING OK", invalid_k_shot:"CHECK THE FRAMING",
     valid_h_shot:"Shot list met ✓", invalid_h_shot:"Some shots don't match",
-    valid_k_mix:"STUDIO SOLVED", invalid_k_mix:"CHECK THE STUDIO",
+    valid_k_mix:"PRODUCTION READY", invalid_k_mix:"CHECK THE PRODUCTION",
     valid_h_mix:"Framing and signal ✓", invalid_h_mix:"Framing or signal issues",
     axis_lbl:"LINE OF ACTION",
     hint_axis:`↔️ <b>Line of action</b> (amber line): every camera on the same side as the wide shot. Cross it and the subjects swap sides on the cut. And no camera may show up in another one's frame.`,
@@ -287,7 +287,7 @@ const STR = {
     w_ok:n=>`All ${n} cameras deliver signal within budget.`,
     w_cost:(c,tt,cv)=>`Cost: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} converters.`,
     w_score:s=>`Score (budget left): <b style="color:var(--txt)">${s} €</b>.`,
-    labels:{ "ESCENARIO":"STAGE","FOSO":"PIT","BUTACAS":"SEATING","PASILLO CENTRAL":"CENTER AISLE","PASILLO":"AISLE","COLUMNA":"COLUMN","TORRE PA":"PA TOWER","TORRE FOH":"FOH TOWER","BARRERA":"BARRIER","PÚBLICO (DE PIE)":"STANDING CROWD","DECORADO / SET":"SET","MESA PLATÓ":"PRESENTER DESK","FOCO":"FLOOR LIGHT","CABINA":"BOOTH","CONTROL":"CONTROL ROOM","SALIDA DE EMERGENCIA":"EMERGENCY EXIT","VÍA DE EVACUACIÓN":"ESCAPE ROUTE","SALIDA":"EXIT","PRESENTADORA":"HOST","INVITADO":"GUEST","Gran angular":"Wide","Normal":"Normal","Tele":"Long","Tele largo":"Very long" },
+    labels:{ "ESCENARIO":"STAGE","FOSO":"PIT","BUTACAS":"SEATING","PASILLO CENTRAL":"CENTER AISLE","PASILLO":"AISLE","COLUMNA":"COLUMN","TORRE PA":"PA TOWER","TORRE FOH":"FOH TOWER","BARRERA":"BARRIER","PÚBLICO (DE PIE)":"STANDING CROWD","DECORADO / SET":"SET","MESA PLATÓ":"PRESENTER DESK","FOCO":"FLOOR LIGHT","CABINA":"BOOTH","CONTROL":"CONTROL ROOM","SOLISTA":"SOLOIST","PIANISTA":"PIANIST","Tele largo":"Very long","Súper tele":"Super tele","Zoom 90x":"90x zoom","SALIDA DE EMERGENCIA":"EMERGENCY EXIT","VÍA DE EVACUACIÓN":"ESCAPE ROUTE","SALIDA":"EXIT","PRESENTADORA":"HOST","INVITADO":"GUEST","Gran angular":"Wide","Normal":"Normal","Tele":"Long","Tele largo":"Very long" },
     cables:{ "Fibra":"Fiber" },
     venues:{ teatro:"Theatre", concierto:"Concert", setTV:"TV Set" },
   },
@@ -309,7 +309,7 @@ const STR = {
     hint_shot:`🎥 <b>Enkoadreak</b>: ukitu kamera bat hautatzeko, <b>arrastatu bere konoaren heldulekua</b> orientatzeko, eta mugitu bere eremuaren barruan. Optikak angelua ireki edo ixten du: ikusten duzun <b>eremu-zabalera</b> distantziaren eta objektiboaren araberakoa da. Planoak: <b>PP</b> ≤0,7 m · <b>PM</b> ≤1,3 · <b>PA</b> ≤1,9 · <b>PE</b> ≤3 · <b>PG</b> >3.`,
     valid_k_shot:"ENKOADREAK ONDO", invalid_k_shot:"BERRIKUSI ENKOADREAK",
     valid_h_shot:"Pauta beteta ✓", invalid_h_shot:"Plano batzuk ez datoz bat",
-    valid_k_mix:"PLATOA EBATZITA", invalid_k_mix:"BERRIKUSI PLATOA",
+    valid_k_mix:"ERREALIZAZIOA PREST", invalid_k_mix:"BERRIKUSI ERREALIZAZIOA",
     valid_h_mix:"Enkoadreak eta seinalea ✓", invalid_h_mix:"Enkoadre- edo seinale-akatsak daude",
     axis_lbl:"EKINTZA-ARDATZA",
     hint_axis:`↔️ <b>Ekintza-ardatza</b> (lerro anbarra): kamera guztiak plano orokorraren alde berean. Bat gurutzatzen bada, mozketan pertsonaiek aldez aldatzen dute. Eta kamerarik ez da beste baten enkoadrean agertu behar.`,
@@ -342,7 +342,7 @@ const STR = {
     w_ok:n=>`${n} kamerek seinalea ematen dute aurrekontuaren barruan.`,
     w_cost:(c,tt,cv)=>`Kostua: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} bihurgailu.`,
     w_score:s=>`Puntuazioa (gelditzen den aurrekontua): <b style="color:var(--txt)">${s} €</b>.`,
-    labels:{ "ESCENARIO":"OHOLTZA","FOSO":"HOBIA","BUTACAS":"BESAULKIAK","PASILLO CENTRAL":"ERDIKO KORRIDOREA","PASILLO":"KORRIDOREA","COLUMNA":"ZUTABEA","TORRE PA":"PA DORREA","TORRE FOH":"FOH DORREA","BARRERA":"HESIA","PÚBLICO (DE PIE)":"JENDEA (ZUTIK)","DECORADO / SET":"DEKORATUA / SETA","MESA PLATÓ":"PLATOKO MAHAIA","FOCO":"FOKUA","CABINA":"KABINA","CONTROL":"KONTROLA","SALIDA DE EMERGENCIA":"LARRIALDIKO IRTEERA","VÍA DE EVACUACIÓN":"EBAKUAZIO-BIDEA","SALIDA":"IRTEERA","PRESENTADORA":"AURKEZLEA","INVITADO":"GONBIDATUA","Gran angular":"Angelu zabala","Normal":"Normala","Tele":"Teleobjektiboa","Tele largo":"Tele luzea" },
+    labels:{ "ESCENARIO":"OHOLTZA","FOSO":"HOBIA","BUTACAS":"BESAULKIAK","PASILLO CENTRAL":"ERDIKO KORRIDOREA","PASILLO":"KORRIDOREA","COLUMNA":"ZUTABEA","TORRE PA":"PA DORREA","TORRE FOH":"FOH DORREA","BARRERA":"HESIA","PÚBLICO (DE PIE)":"JENDEA (ZUTIK)","DECORADO / SET":"DEKORATUA / SETA","MESA PLATÓ":"PLATOKO MAHAIA","FOCO":"FOKUA","CABINA":"KABINA","CONTROL":"KONTROLA","SOLISTA":"BAKARLARIA","PIANISTA":"PIANO-JOLEA","Tele largo":"Tele luzea","Súper tele":"Super tele","Zoom 90x":"90x zooma","SALIDA DE EMERGENCIA":"LARRIALDIKO IRTEERA","VÍA DE EVACUACIÓN":"EBAKUAZIO-BIDEA","SALIDA":"IRTEERA","PRESENTADORA":"AURKEZLEA","INVITADO":"GONBIDATUA","Gran angular":"Angelu zabala","Normal":"Normala","Tele":"Teleobjektiboa","Tele largo":"Tele luzea" },
     cables:{ "Fibra":"Zuntza" },
     venues:{ teatro:"Antzokia", concierto:"Kontzertua", setTV:"TB Platoa" },
   },
@@ -821,10 +821,55 @@ const SETTV_MIX = {
   budget: 700,
 };
 
+const TEATRO_COB = {
+  nombre:  { es:"Teatro · Cobertura", en:"Theatre · Coverage", eu:"Antzokia · Estaldura" },
+  encargo: { es:"Retransmisión de un recital: hay que CUBRIR el escenario y además llevar la señal a cabina. En un teatro las cámaras están lejos, así que el plano lo da la ÓPTICA: aquí los objetivos son de retransmisión (14°, 7°, 3°, 1,5°). Cumple la pauta sin que una cámara salga en el plano de otra, y cablea a la cabina sin pasarte de presupuesto.",
+             en:"Recital broadcast: you must COVER the stage and also get the signal to the booth. In a theatre the cameras sit far away, so the shot comes from the LENS: these are broadcast lenses (14°, 7°, 3°, 1.5°). Meet the shot list without any camera showing up in another's shot, and cable to the booth within budget.",
+             eu:"Errezitaldi baten emanaldia: eszenatokia ESTALI behar duzu eta seinalea kabinara eraman. Antzoki batean kamerak urrun daude, beraz planoa OPTIKAK ematen du: hemen emanaldi-objektiboak dira (14°, 7°, 3°, 1,5°). Bete pauta kamera bat beste baten planoan atera gabe, eta kableatu kabinara aurrekontua gainditu gabe." },
+  shot: true, freeCams: true,
+  planoM:  { w:110, h:66 },
+  escalaPxM: 10.5,
+  mesa: { x:95, y:33, inputs:3, inFmt:"sdi", faces:"left" },
+  zones: [
+    { shape:"rect", kind:"stage",   x:10, y:33, w:12, h:54, label:"ESCENARIO" },
+    { shape:"rect", kind:"pit",     x:20, y:33, w:6,  h:50, label:"FOSO" },
+    { shape:"rect", kind:"seating", x:52, y:21, w:48, h:14, label:"BUTACAS" },
+    { shape:"rect", kind:"walk",    x:52, y:33, w:48, h:10, label:"PASILLO CENTRAL" },
+    { shape:"rect", kind:"seating", x:52, y:45, w:48, h:14, label:"BUTACAS" },
+    { shape:"rect", kind:"walk",    x:82, y:33, w:10, h:54, label:"PASILLO" },
+  ],
+  subjects: [
+    { id:"S", label:"SOLISTA",  x:10, y:28, size:0.5 },
+    { id:"P", label:"PIANISTA", x:13, y:40, size:0.5 },
+  ],
+  lenses: {                                          // ópticas de retransmisión: el teatro se cubre con tele
+    tele:   { nombre:"Tele",       fov:14  },
+    tele_l: { nombre:"Tele largo", fov:7   },
+    tele_s: { nombre:"Súper tele", fov:3   },
+    zoom:   { nombre:"Zoom 90x",   fov:1.5 },
+  },
+  cams: [
+    { id:"CAM 1", x:50,   y:33, ang:180, lens:"tele", out:"sdi", area:{x:50,   y:33, w:40, h:8}  },   // frontal, pasillo central
+    { id:"CAM 2", x:25.5, y:20, ang:180, lens:"tele", out:"sdi", area:{x:25,   y:20, w:3,  h:16} },   // lateral, junto al foso
+    { id:"CAM 3", x:25.5, y:46, ang:180, lens:"tele", out:"sdi", area:{x:25,   y:46, w:3,  h:16} },
+  ],
+  plan: [
+    { cam:0, subj:["S","P"], size:"PG" },
+    { cam:1, subj:"S",       size:"PM" },
+    { cam:2, subj:"P",       size:"PP" },
+  ],
+  cableTypes: {
+    sdi: { nombre:"HD-SDI", signal:"sdi", limite:100, eurM:3, conv:0, color:"--cyan" },
+  },
+  converters: {},
+  convEur: 250,
+  budget: 620,
+};
+
 const GAME = {
   teatro:    { sub:{ es:"Empiezas con SDI y HDMI en un teatro pequeño. Al subir de nivel el recinto crece: aparece la fibra (SDI no llega) y luego los formatos mixtos (IP).",
                      en:"Start with SDI and HDMI in a small theatre. As levels go up the venue grows: fibre appears (SDI won't reach) and then mixed formats (IP).",
-                     eu:"SDI eta HDMIrekin hasten zara antzoki txiki batean. Mailak igo ahala aretoa hazten da: zuntza agertzen da (SDI ez da iristen) eta gero formatu mistoak (IP)." }, niveles:[ TEATRO_N1, TEATRO_N2, TEATRO_N3, TEATRO_N4 ] },
+                     eu:"SDI eta HDMIrekin hasten zara antzoki txiki batean. Mailak igo ahala aretoa hazten da: zuntza agertzen da (SDI ez da iristen) eta gero formatu mistoak (IP)." }, niveles:[ TEATRO_N1, TEATRO_N2, TEATRO_N3, TEATRO_N4, TEATRO_COB ] },
   concierto: { sub:{ es:"Grandes distancias (fibra), público de pie enorme, torres de PA. Escenario a la izquierda.",
                      en:"Long distances (fibre), huge standing crowd, PA towers. Stage on the left.",
                      eu:"Distantzia luzeak (zuntza), jende ugari zutik, PA dorreak. Oholtza ezkerrean." }, niveles:[ CONCIERTO_N1, CONCIERTO_N2, CONCIERTO_N3 ] },
@@ -854,6 +899,12 @@ const mesaW=()=>LEVEL.mesa.w||(mesaFaces()==="left"?16:26);   // en metros; los 
 const mesaH=()=>LEVEL.mesa.h||(mesaFaces()==="left"?(nInputs()*mesaGap()+6):10);
 const mesaGap=()=>LEVEL.mesa.gap||6;                          // separación entre entradas
 const portOff=()=>LEVEL.shot?0.9:3;                           // el conector, pegado a la cámara si el plano es de plató
+function portFor(x,y){                                        // el conector sale por el lado que quede libre
+  const o=portOff();
+  const cand=[[x+o,y],[x-o,y],[x,y+o],[x,y-o]];
+  for(const [px,py] of cand) if(!inHardZone(px,py)) return {x:px,y:py};
+  return {x:x+o,y:y};
+}
 
 /* ============================================================
    GEOMETRÍA
@@ -1026,7 +1077,7 @@ function drawCams(){
     if(LEVEL.shot){                                     // cono real: apertura de la óptica y orientación
       const tg=(LEVEL.plan||[]).find(pl=>pl.cam===i);
       const fr0=tg?framing(i,tg.subj):null;
-      const a=rad(c.ang), h=rad(camFov(c)/2), R=LEVEL.shotRange||(fr0?Math.min(fr0.d*1.35,14):12);
+      const a=rad(c.ang), h=rad(camFov(c)/2), R=LEVEL.shotRange||(fr0?fr0.d*1.15:12);   // el cono llega hasta lo que mira
       const p1={x:c.x+R*Math.cos(a-h), y:c.y+R*Math.sin(a-h)}, p2={x:c.x+R*Math.cos(a+h), y:c.y+R*Math.sin(a+h)};
       fov=`M${m(c.x)},${m(c.y)} L${m(p1.x)},${m(p1.y)} A${m(R)},${m(R)} 0 0 1 ${m(p2.x)},${m(p2.y)} Z`;
       el("path",{d:fov,fill:"rgba(63,224,208,.07)",stroke:css("--cyan"),"stroke-width":0.9,opacity:.75},gStatic);
@@ -1142,7 +1193,8 @@ function framing(ci, ids){
     for(let i=0;i<list.length;i++)for(let j=i+1;j<list.length;j++) sep=Math.max(sep,dist(list[i],list[j]));
     need=sep+(list[0].size||0.5);
   }
-  return { d, fw, out, needW:need, talla:shotSize(fw), cabe:fw>=need };
+  // "caber" solo aplica a grupos: un primer plano de una persona recorta, y debe poder hacerlo
+  return { d, fw, out, needW:need, talla:shotSize(fw), cabe:(list.length>1?fw>=need:true) };
 }
 
 /* ============================================================
@@ -1383,7 +1435,7 @@ svg.addEventListener("pointermove",e=>{
     let nx=p.x/S, ny=p.y/S;
     if(a){ nx=Math.max(a.x-a.w/2,Math.min(a.x+a.w/2,nx)); ny=Math.max(a.y-a.h/2,Math.min(a.y+a.h/2,ny)); }
     else { nx=Math.max(2,Math.min(P.w-2,nx)); ny=Math.max(2,Math.min(P.h-2,ny)); }
-    if(!inHardZone(nx,ny)){ c.x=nx; c.y=ny; c.port={x:nx+portOff(),y:ny}; drawStatic(); redrawCables(); updateHUD(); } }
+    if(!inHardZone(nx,ny)){ c.x=nx; c.y=ny; c.port=portFor(nx,ny); drawStatic(); redrawCables(); updateHUD(); } }
   else{ if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)>6)drag.moved=true; const p=toSvg(e); cables[drag.ci].wps[drag.wp]={x:p.x/S,y:p.y/S}; redrawCables(); updateHUD(); }
 });
 
@@ -1704,7 +1756,7 @@ function cargarNivel(vid,idx){
     for(let i=0;i<n;i++) inputs.push(faces==="left"
       ? {x:LEVEL.mesa.x-mesaW()/2, y:LEVEL.mesa.y+(i-(n-1)/2)*g}
       : {x:LEVEL.mesa.x+(i-(n-1)/2)*g, y:LEVEL.mesa.y-mesaH()/2+1}); }
-  cams=LEVEL.cams.map(c=>({...c, port:{x:c.x+portOff(), y:c.y}}));   // salida por detrás de la cámara
+  cams=LEVEL.cams.map(c=>({...c, port:portFor(c.x,c.y)}));   // salida por detrás de la cámara
   cables=new Array(cams.length).fill(null);
   camConv=new Array(cams.length).fill(null);
   inConv=new Array(inputs.length).fill(null);
@@ -1719,7 +1771,7 @@ function cargarNivel(vid,idx){
 }
 function reset(){
   if(!LEVEL)return;
-  cams=LEVEL.cams.map(c=>({...c, port:{x:c.x+portOff(), y:c.y}}));   // vuelven a su posición/ángulo/óptica inicial
+  cams=LEVEL.cams.map(c=>({...c, port:portFor(c.x,c.y)}));   // vuelven a su posición/ángulo/óptica inicial
   cables=new Array(cams.length).fill(null);
   camConv=new Array(cams.length).fill(null);
   inConv=new Array(inputs.length).fill(null);
