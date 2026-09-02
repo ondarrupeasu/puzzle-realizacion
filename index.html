@@ -118,12 +118,17 @@
       <div class="inv" id="convs"></div>
     </div>
 
+    <div class="block" id="planBlock">
+      <h2 data-i18n="plan_title">Pauta de realización</h2>
+      <div id="plan"></div>
+    </div>
+
     <div class="block" id="elemBlock">
       <h2 data-i18n="inv_elem">Elementos</h2>
       <div class="inv" id="elems"></div>
     </div>
 
-    <div class="block">
+    <div class="block" id="statusBlock">
       <h2 data-i18n="status">Estado</h2>
       <div class="stat"><span class="lbl" data-i18n="st_conn">Cámaras conectadas</span><span class="val" id="s-conn">0 / 0</span></div>
       <div class="stat"><span class="lbl" data-i18n="st_total">Metraje total</span><span class="val" id="s-total">0 m</span></div>
@@ -184,6 +189,15 @@ const STR = {
     meta_conv:"€ · toca cámara o entrada", meta_ramp:"€ · toca un pasillo (lo comparten varias cámaras)", meta_rx:"toca cerca de la cámara inalámbrica (dentro del alcance RF)",
     dec_name:"Decimator", meta_dec:"€ · toca una cámara (invierte HD↔4K)",
     fs_name:"Frame sync (mesa)", meta_fs:"€ · alinea todas las entradas", lat_synced:"sincronizado",
+    inv_lens:"Inventario · óptica", meta_lens:"de campo horizontal", plan_title:"Pauta de realización",
+    shot_none:"sin sujeto en cuadro",
+    hint_shot:`🎥 <b>Encuadres</b>: aquí no se cablea. Toca una cámara para seleccionarla, <b>arrastra el tirador</b> de su cono para orientarla y muévela dentro de su área. La óptica abre o cierra el ángulo: el <b>ancho de campo</b> que ves depende de la distancia y del objetivo. Planos: <b>PP</b> ≤0,7 m · <b>PM</b> ≤1,3 · <b>PA</b> ≤1,9 · <b>PE</b> ≤3 · <b>PG</b> >3.`,
+    valid_k_shot:"ENCUADRES CORRECTOS", invalid_k_shot:"REVISA LOS ENCUADRES",
+    valid_h_shot:"Pauta cumplida ✓", invalid_h_shot:"Hay planos que no cuadran",
+    m_shotout:(n,q)=>`${n}: fuera de cuadro — ${q}. Orienta la cámara o abre el ángulo.`,
+    m_shottight:(n,q,fw,need)=>`${n}: ${q} no cabe en el encuadre — ${fw} m de campo para ${need} m de sujeto. Aléjate o abre el ángulo.`,
+    m_shotsize:(n,q,da,fw)=>`${n}: la pauta pide un ${q} y estás dando un ${da} (${fw} m de campo). Cambia la óptica o la distancia.`,
+    w_shotok:n=>`Las ${n} cámaras cumplen la pauta de realización.`,
     hint:`Elige el <b>tipo de cable</b> y arrastra desde el <b>objetivo</b> de la cámara a una <b>entrada</b> de la mesa. <b>Tira del cable</b> para curvarlo (suma metros); rodea las butacas (los pasillos se cruzan libres). Si el nivel trae conversores, colócalos tocando cámara o entrada — ojo al sentido. El juego <b>no te avisa</b> si algo no encaja: pulsa <b>Ya lo tengo</b> para validar. Pellizca para acercar.`,
     hint_sync:(tol,fps)=>`⏱ <b>Latencia</b>: la RF, el IP y los conversores retrasan la imagen; la fibra y el SDI no. A ${fps}p un frame son ${(1000/fps).toFixed(0)} ms, y la mesa aguanta ${tol} ms de desfase: por encima, el corte salta. O igualas los caminos, o pagas un frame sync.`,
     hint_rf:`📡 <b>Inalámbrica</b>: el receptor (RX) necesita <b>alcance</b> Y <b>línea de vista</b> — la RF no atraviesa torres, columnas ni muros (el público sí la deja pasar). Colócalo donde se pueda acceder.`,
@@ -207,7 +221,7 @@ const STR = {
     w_ok:n=>`Las ${n} cámaras entregan señal dentro de presupuesto.`,
     w_cost:(c,tt,cv)=>`Coste: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} conversores.`,
     w_score:s=>`Puntuación (presupuesto restante): <b style="color:var(--txt)">${s} €</b>.`,
-    labels:{ "ESCENARIO":"ESCENARIO","FOSO":"FOSO","BUTACAS":"BUTACAS","PASILLO CENTRAL":"PASILLO CENTRAL","PASILLO":"PASILLO","COLUMNA":"COLUMNA","TORRE PA":"TORRE PA","TORRE FOH":"TORRE FOH","BARRERA":"BARRERA","PÚBLICO (DE PIE)":"PÚBLICO (DE PIE)","DECORADO / SET":"DECORADO / SET","MESA PLATÓ":"MESA PLATÓ","FOCO":"FOCO","CABINA":"CABINA","CONTROL":"CONTROL","SALIDA DE EMERGENCIA":"SALIDA DE EMERGENCIA","VÍA DE EVACUACIÓN":"VÍA DE EVACUACIÓN","SALIDA":"SALIDA" },
+    labels:{ "ESCENARIO":"ESCENARIO","FOSO":"FOSO","BUTACAS":"BUTACAS","PASILLO CENTRAL":"PASILLO CENTRAL","PASILLO":"PASILLO","COLUMNA":"COLUMNA","TORRE PA":"TORRE PA","TORRE FOH":"TORRE FOH","BARRERA":"BARRERA","PÚBLICO (DE PIE)":"PÚBLICO (DE PIE)","DECORADO / SET":"DECORADO / SET","MESA PLATÓ":"MESA PLATÓ","FOCO":"FOCO","CABINA":"CABINA","CONTROL":"CONTROL","SALIDA DE EMERGENCIA":"SALIDA DE EMERGENCIA","VÍA DE EVACUACIÓN":"VÍA DE EVACUACIÓN","SALIDA":"SALIDA","PRESENTADORA":"PRESENTADORA","INVITADO":"INVITADO","Gran angular":"Gran angular","Normal":"Normal","Tele":"Tele","Tele largo":"Tele largo" },
     cables:{ "Fibra":"Fibra" },
     venues:{ teatro:"Teatro", concierto:"Concierto", setTV:"Set de TV" },
   },
@@ -224,6 +238,15 @@ const STR = {
     meta_conv:"€ · tap a camera or input", meta_ramp:"€ · tap an aisle (shared by cameras)", meta_rx:"tap near the wireless camera (within RF range)",
     dec_name:"Decimator", meta_dec:"€ · tap a camera (flips HD↔4K)",
     fs_name:"Frame sync (desk)", meta_fs:"€ · aligns every input", lat_synced:"in sync",
+    inv_lens:"Inventory · lens", meta_lens:"horizontal field", plan_title:"Shot list",
+    shot_none:"no subject in frame",
+    hint_shot:`🎥 <b>Framing</b>: no cabling here. Tap a camera to select it, <b>drag the handle</b> on its cone to aim it, and move it inside its area. The lens opens or closes the angle: the <b>field width</b> you see depends on distance and lens. Shots: <b>CU</b> ≤0.7 m · <b>MS</b> ≤1.3 · <b>MLS</b> ≤1.9 · <b>FS</b> ≤3 · <b>WS</b> >3.`,
+    valid_k_shot:"FRAMING OK", invalid_k_shot:"CHECK THE FRAMING",
+    valid_h_shot:"Shot list met ✓", invalid_h_shot:"Some shots don't match",
+    m_shotout:(n,q)=>`${n}: out of frame — ${q}. Aim the camera or open the angle.`,
+    m_shottight:(n,q,fw,need)=>`${n}: ${q} doesn't fit — ${fw} m of field for ${need} m of subject. Move back or open the angle.`,
+    m_shotsize:(n,q,da,fw)=>`${n}: the shot list asks for a ${q} and you're giving a ${da} (${fw} m of field). Change lens or distance.`,
+    w_shotok:n=>`All ${n} cameras match the shot list.`,
     hint:`Pick a <b>cable type</b> and drag from the camera's <b>output</b> to a desk <b>input</b>. <b>Pull the cable</b> to bend it (adds metres); route around the seating (aisles are free to cross). If the level has converters, place them by tapping a camera or input — mind the direction. The game <b>won't warn you</b> if something doesn't fit: press <b>I'm done</b> to validate. Pinch to zoom.`,
     hint_sync:(tol,fps)=>`⏱ <b>Latency</b>: RF, IP and converters delay the picture; fibre and SDI don't. At ${fps}p a frame is ${(1000/fps).toFixed(0)} ms, and the desk tolerates ${tol} ms of offset: beyond that the cut jumps. Either match the paths or pay for a frame sync.`,
     hint_rf:`📡 <b>Wireless</b>: the receiver (RX) needs <b>range</b> AND <b>line of sight</b> — RF doesn't go through towers, columns or walls (the crowd does let it through). Place it somewhere reachable.`,
@@ -247,7 +270,7 @@ const STR = {
     w_ok:n=>`All ${n} cameras deliver signal within budget.`,
     w_cost:(c,tt,cv)=>`Cost: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} converters.`,
     w_score:s=>`Score (budget left): <b style="color:var(--txt)">${s} €</b>.`,
-    labels:{ "ESCENARIO":"STAGE","FOSO":"PIT","BUTACAS":"SEATING","PASILLO CENTRAL":"CENTER AISLE","PASILLO":"AISLE","COLUMNA":"COLUMN","TORRE PA":"PA TOWER","TORRE FOH":"FOH TOWER","BARRERA":"BARRIER","PÚBLICO (DE PIE)":"STANDING CROWD","DECORADO / SET":"SET","MESA PLATÓ":"PRESENTER DESK","FOCO":"FLOOR LIGHT","CABINA":"BOOTH","CONTROL":"CONTROL ROOM","SALIDA DE EMERGENCIA":"EMERGENCY EXIT","VÍA DE EVACUACIÓN":"ESCAPE ROUTE","SALIDA":"EXIT" },
+    labels:{ "ESCENARIO":"STAGE","FOSO":"PIT","BUTACAS":"SEATING","PASILLO CENTRAL":"CENTER AISLE","PASILLO":"AISLE","COLUMNA":"COLUMN","TORRE PA":"PA TOWER","TORRE FOH":"FOH TOWER","BARRERA":"BARRIER","PÚBLICO (DE PIE)":"STANDING CROWD","DECORADO / SET":"SET","MESA PLATÓ":"PRESENTER DESK","FOCO":"FLOOR LIGHT","CABINA":"BOOTH","CONTROL":"CONTROL ROOM","SALIDA DE EMERGENCIA":"EMERGENCY EXIT","VÍA DE EVACUACIÓN":"ESCAPE ROUTE","SALIDA":"EXIT","PRESENTADORA":"HOST","INVITADO":"GUEST","Gran angular":"Wide","Normal":"Normal","Tele":"Long","Tele largo":"Very long" },
     cables:{ "Fibra":"Fiber" },
     venues:{ teatro:"Theatre", concierto:"Concert", setTV:"TV Set" },
   },
@@ -264,6 +287,15 @@ const STR = {
     meta_conv:"€ · ukitu kamera bat edo sarrera bat", meta_ramp:"€ · ukitu korridore bat (kamerek partekatzen dute)", meta_rx:"ukitu haririk gabeko kameratik gertu (RF irismenaren barruan)",
     dec_name:"Decimator", meta_dec:"€ · ukitu kamera bat (HD↔4K trukatzen du)",
     fs_name:"Frame sync (mahaia)", meta_fs:"€ · sarrera guztiak lerrokatzen ditu", lat_synced:"sinkronizatuta",
+    inv_lens:"Inbentarioa · optika", meta_lens:"eremu horizontala", plan_title:"Errealizazio-pauta",
+    shot_none:"ez dago subjekturik koadroan",
+    hint_shot:`🎥 <b>Enkoadreak</b>: hemen ez da kableatzen. Ukitu kamera bat hautatzeko, <b>arrastatu bere konoaren heldulekua</b> orientatzeko, eta mugitu bere eremuaren barruan. Optikak angelua ireki edo ixten du: ikusten duzun <b>eremu-zabalera</b> distantziaren eta objektiboaren araberakoa da. Planoak: <b>PP</b> ≤0,7 m · <b>PM</b> ≤1,3 · <b>PA</b> ≤1,9 · <b>PE</b> ≤3 · <b>PG</b> >3.`,
+    valid_k_shot:"ENKOADREAK ONDO", invalid_k_shot:"BERRIKUSI ENKOADREAK",
+    valid_h_shot:"Pauta beteta ✓", invalid_h_shot:"Plano batzuk ez datoz bat",
+    m_shotout:(n,q)=>`${n}: koadrotik kanpo — ${q}. Orientatu kamera edo zabaldu angelua.`,
+    m_shottight:(n,q,fw,need)=>`${n}: ${q} ez da koadroan sartzen — ${fw} m eremu ${need} m-ko subjektuarentzat. Urrundu edo zabaldu angelua.`,
+    m_shotsize:(n,q,da,fw)=>`${n}: pautak ${q} bat eskatzen du eta ${da} bat ematen ari zara (${fw} m eremu). Aldatu optika edo distantzia.`,
+    w_shotok:n=>`${n} kamerek errealizazio-pauta betetzen dute.`,
     hint:`Aukeratu <b>kable mota</b> eta arrastatu kameraren <b>objektibotik</b> mahaiaren <b>sarrera</b> batera. <b>Tira egin kableari</b> okertzeko (metroak batzen ditu); saihestu besaulkiak (korridoreak libre gurutza daitezke). Mailak bihurgailuak baditu, jarri kamera edo sarrera ukituz — kontuz noranzkoarekin. Jokoak <b>ez dizu abisatzen</b> zerbait ondo ez badago: sakatu <b>Prest nago</b> balidatzeko. Atximurkatu gerturatzeko.`,
     hint_sync:(tol,fps)=>`⏱ <b>Latentzia</b>: RFak, IPak eta bihurgailuek irudia atzeratzen dute; zuntzak eta SDIk ez. ${fps}p-tan frame bat ${(1000/fps).toFixed(0)} ms da, eta mahaiak ${tol} ms-ko desfasea onartzen du: horretatik gora, planoen arteko mozketak salto egiten du. Edo bideak berdintzen dituzu, edo frame sync bat ordaintzen duzu.`,
     hint_rf:`📡 <b>Haririk gabekoa</b>: hartzaileak (RX) <b>irismena</b> ETA <b>ikuspegi-lerroa</b> behar ditu — RFak ez ditu dorreak, zutabeak edo hormak zeharkatzen (jendeak bai uzten dio pasatzen). Jarri sarbidea dagoen lekuan.`,
@@ -287,7 +319,7 @@ const STR = {
     w_ok:n=>`${n} kamerek seinalea ematen dute aurrekontuaren barruan.`,
     w_cost:(c,tt,cv)=>`Kostua: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} bihurgailu.`,
     w_score:s=>`Puntuazioa (gelditzen den aurrekontua): <b style="color:var(--txt)">${s} €</b>.`,
-    labels:{ "ESCENARIO":"OHOLTZA","FOSO":"HOBIA","BUTACAS":"BESAULKIAK","PASILLO CENTRAL":"ERDIKO KORRIDOREA","PASILLO":"KORRIDOREA","COLUMNA":"ZUTABEA","TORRE PA":"PA DORREA","TORRE FOH":"FOH DORREA","BARRERA":"HESIA","PÚBLICO (DE PIE)":"JENDEA (ZUTIK)","DECORADO / SET":"DEKORATUA / SETA","MESA PLATÓ":"PLATOKO MAHAIA","FOCO":"FOKUA","CABINA":"KABINA","CONTROL":"KONTROLA","SALIDA DE EMERGENCIA":"LARRIALDIKO IRTEERA","VÍA DE EVACUACIÓN":"EBAKUAZIO-BIDEA","SALIDA":"IRTEERA" },
+    labels:{ "ESCENARIO":"OHOLTZA","FOSO":"HOBIA","BUTACAS":"BESAULKIAK","PASILLO CENTRAL":"ERDIKO KORRIDOREA","PASILLO":"KORRIDOREA","COLUMNA":"ZUTABEA","TORRE PA":"PA DORREA","TORRE FOH":"FOH DORREA","BARRERA":"HESIA","PÚBLICO (DE PIE)":"JENDEA (ZUTIK)","DECORADO / SET":"DEKORATUA / SETA","MESA PLATÓ":"PLATOKO MAHAIA","FOCO":"FOKUA","CABINA":"KABINA","CONTROL":"KONTROLA","SALIDA DE EMERGENCIA":"LARRIALDIKO IRTEERA","VÍA DE EVACUACIÓN":"EBAKUAZIO-BIDEA","SALIDA":"IRTEERA","PRESENTADORA":"AURKEZLEA","INVITADO":"GONBIDATUA","Gran angular":"Angelu zabala","Normal":"Normala","Tele":"Teleobjektiboa","Tele largo":"Tele luzea" },
     cables:{ "Fibra":"Zuntza" },
     venues:{ teatro:"Antzokia", concierto:"Kontzertua", setTV:"TB Platoa" },
   },
@@ -647,6 +679,41 @@ const TEATRO_N4 = {
   budget: 2400,
 };
 
+const SETTV_ENC = {
+  nombre:  { es:"Set de TV · Encuadres", en:"TV Set · Framing", eu:"TB Platoa · Enkoadreak" },
+  encargo: { es:"Aquí no se cablea: se ENCUADRA. Plató de entrevista con presentadora e invitado. Orienta cada cámara (arrastra su cono de visión), muévela dentro de su área y elige la óptica hasta cumplir la pauta de realización: cada cámara tiene asignado un plano. El ancho de campo depende de la distancia y de la óptica — acércate o mete tele para cerrar el plano.",
+             en:"No cabling here: this is FRAMING. Interview set with a host and a guest. Aim each camera (drag its view cone), move it inside its working area and pick a lens until the shot list is met: each camera has an assigned shot. Field of view depends on distance and lens — get closer or go long to tighten.",
+             eu:"Hemen ez da kableatzen: ENKOADRATU egiten da. Elkarrizketa-platoa aurkezle eta gonbidatuarekin. Orientatu kamera bakoitza (arrastatu bere ikus-konoa), mugitu bere eremuaren barruan eta aukeratu optika errealizazio-pauta bete arte: kamera bakoitzak plano bat esleituta du. Eremu-zabalera distantziaren eta optikaren araberakoa da — hurbildu edo teleobjektiboa jarri planoa ixteko." },
+  shot: true, freeCams: true,
+  planoM:  { w:26, h:18 },
+  escalaPxM: 42,
+  zones: [
+    { shape:"rect", kind:"stage",   x:13, y:2.6, w:18, h:3.6, label:"DECORADO / SET" },
+    { shape:"rect", kind:"seating", x:13, y:6.6, w:4.4, h:1.4, label:"MESA PLATÓ" },
+  ],
+  subjects: [                                            // ancho de referencia: hombros ≈ 0,5 m
+    { id:"P", label:"PRESENTADORA", x:11.6, y:5.6, size:0.5 },
+    { id:"I", label:"INVITADO",     x:14.4, y:5.6, size:0.5 },
+  ],
+  lenses: {
+    wide:   { nombre:"Gran angular", fov:62 },
+    normal: { nombre:"Normal",       fov:33 },
+    tele:   { nombre:"Tele",         fov:14 },
+    tele_l: { nombre:"Tele largo",   fov:7  },
+  },
+  cams: [
+    { id:"CAM 1", x:13, y:12,   ang:-90,  lens:"tele",   area:{x:13, y:11.5, w:8, h:5} },
+    { id:"CAM 2", x:8,  y:11,   ang:-70,  lens:"normal", area:{x:8,  y:10.5, w:5, h:6} },
+    { id:"CAM 3", x:18, y:11,   ang:-110, lens:"normal", area:{x:18, y:10.5, w:5, h:6} },
+  ],
+  plan: [                                                // pauta de realización: qué da cada cámara
+    { cam:0, subj:["P","I"], size:"PG" },                // plano general de los dos
+    { cam:1, subj:"P",       size:"PM" },                // plano medio de la presentadora
+    { cam:2, subj:"I",       size:"PP" },                // primer plano del invitado
+  ],
+  budget: 0,
+};
+
 const GAME = {
   teatro:    { sub:{ es:"Empiezas con SDI y HDMI en un teatro pequeño. Al subir de nivel el recinto crece: aparece la fibra (SDI no llega) y luego los formatos mixtos (IP).",
                      en:"Start with SDI and HDMI in a small theatre. As levels go up the venue grows: fibre appears (SDI won't reach) and then mixed formats (IP).",
@@ -656,7 +723,7 @@ const GAME = {
                      eu:"Distantzia luzeak (zuntza), jende ugari zutik, PA dorreak. Oholtza ezkerrean." }, niveles:[ CONCIERTO_N1, CONCIERTO_N2, CONCIERTO_N3 ] },
   setTV:     { sub:{ es:"Decorado y mesa arriba, cámaras abajo apuntando al set. Control en sala aparte (patch de pared).",
                      en:"Set and desk at the top, cameras below aiming at the set. Gallery in a separate room (wall patch).",
-                     eu:"Dekoratua eta mahaia goian, kamerak behean set-era begira. Kontrola beste gela batean (hormako patcha)." }, niveles:[ SETTV_N1, SETTV_N2, SETTV_N3 ] },
+                     eu:"Dekoratua eta mahaia goian, kamerak behean set-era begira. Kontrola beste gela batean (hormako patcha)." }, niveles:[ SETTV_N1, SETTV_N2, SETTV_N3, SETTV_ENC ] },
 };
 
 /* ============================================================
@@ -672,7 +739,7 @@ let LEVEL=null, S=10, inputs=[], cams=[], VBW=0, VBH=0;
 const m=v=>v*S;                                   // metros → px de dibujo (lee la S actual)
 
 let cables=[], camConv=[], inConv=[], ramps=[], rx={}, camDec=[];   // rx[ci]={x,y}=receptor inalámbrico; camDec[ci]=true si hay Decimator
-let curType=null, curConv=null, mode="cable", locked=false, frameSync=false;
+let curType=null, curConv=null, mode="cable", locked=false, frameSync=false, selCam=0;
 const ctOf=ci=>LEVEL.cableTypes[cables[ci].type];
 
 /* ============================================================
@@ -798,6 +865,8 @@ function drawStatic(){
   const sl=el("text",{x:bx+m(10),y:by-8,fill:css("--dim"),"font-size":11,"text-anchor":"middle"},gStatic);
   sl.textContent="20 m";
 
+  if(LEVEL.shot){ drawCams(); drawSubjects(); return; }   // el modo encuadre no tiene mesa ni entradas
+
   // mesa / cabina (faces "top"=entradas arriba; "left"=entradas a la izquierda, mirando a la sala)
   const faces=LEVEL.mesa.faces||"top", nin=nInputs();
   const mw = faces==="left"?16:26, mh = faces==="left"?(nin*6+6):10;
@@ -812,31 +881,121 @@ function drawStatic(){
     t.textContent="IN"+(i+1)+"·"+String(inFmtOf(i)).toUpperCase();
   });
 
+  drawCams();
+}
+
+function drawSubjects(){
+  (LEVEL.subjects||[]).forEach(sb=>{
+    el("circle",{cx:m(sb.x),cy:m(sb.y),r:m((sb.size||0.5)/2),fill:css("--bg"),stroke:css("--amber"),"stroke-width":1.8},gStatic);
+    el("circle",{cx:m(sb.x),cy:m(sb.y),r:3,fill:css("--amber")},gStatic);
+    const t=el("text",{x:m(sb.x),y:m(sb.y)-m((sb.size||0.5)/2)-7,fill:css("--amber"),"font-size":9.5,"letter-spacing":"1","text-anchor":"middle"},gStatic);
+    t.textContent=tl(sb.label||sb.id);
+  });
+}
+
+function drawCams(){
   // cámaras (símbolo de plano: cuerpo + triángulo de visión hacia el escenario, a la izquierda)
   cams.forEach((c,i)=>{
     if(c.wireless) el("circle",{cx:m(c.x),cy:m(c.y),r:m(c.range),fill:"none",stroke:css("--line"),"stroke-width":1,"stroke-dasharray":"2 6"},gStatic);  // alcance RF (guía)
-    const dir=c.dir||"left";   // hacia dónde mira (el triángulo de visión)
-    const fov = dir==="up"
-      ? `M${m(c.x)},${m(c.y-1.8)} L${m(c.x-3)},${m(c.y-6.8)} L${m(c.x+3)},${m(c.y-6.8)} Z`
-      : `M${m(c.x-1.8)},${m(c.y)} L${m(c.x-6.5)},${m(c.y-3)} L${m(c.x-6.5)},${m(c.y+3)} Z`;
-    el("path",{d:fov,fill:"rgba(63,224,208,.10)",stroke:css("--cyan"),"stroke-width":1},gStatic);
-    el("rect",{x:m(c.x-1.8),y:m(c.y-1.8),width:m(3.8),height:m(3.6),rx:m(0.5),fill:css("--panel"),stroke:css("--cyan"),"stroke-width":1.7},gStatic);
+    let fov;
+    if(LEVEL.shot){                                     // cono real: apertura de la óptica y orientación
+      const tg=(LEVEL.plan||[]).find(pl=>pl.cam===i);
+      const fr0=tg?framing(i,tg.subj):null;
+      const a=rad(c.ang), h=rad(camFov(c)/2), R=LEVEL.shotRange||(fr0?Math.min(fr0.d*1.35,14):12);
+      const p1={x:c.x+R*Math.cos(a-h), y:c.y+R*Math.sin(a-h)}, p2={x:c.x+R*Math.cos(a+h), y:c.y+R*Math.sin(a+h)};
+      fov=`M${m(c.x)},${m(c.y)} L${m(p1.x)},${m(p1.y)} A${m(R)},${m(R)} 0 0 1 ${m(p2.x)},${m(p2.y)} Z`;
+      el("path",{d:fov,fill:"rgba(63,224,208,.07)",stroke:css("--cyan"),"stroke-width":0.9,opacity:.75},gStatic);
+      fov=null;
+    }else{
+      const dir=c.dir||"left";   // hacia dónde mira (el triángulo de visión)
+      fov = dir==="up"
+        ? `M${m(c.x)},${m(c.y-1.8)} L${m(c.x-3)},${m(c.y-6.8)} L${m(c.x+3)},${m(c.y-6.8)} Z`
+        : `M${m(c.x-1.8)},${m(c.y)} L${m(c.x-6.5)},${m(c.y-3)} L${m(c.x-6.5)},${m(c.y+3)} Z`;
+    }
+    if(fov) el("path",{d:fov,fill:"rgba(63,224,208,.10)",stroke:css("--cyan"),"stroke-width":1},gStatic);
+    const bw=LEVEL.shot?0.55:3.8, bh=LEVEL.shot?0.55:3.6, sel=(LEVEL.shot&&selCam===i);
+    el("rect",{x:m(c.x)-m(bw)/2,y:m(c.y)-m(bh)/2,width:m(bw),height:m(bh),rx:3,fill:css("--panel"),stroke:sel?css("--amber"):css("--cyan"),"stroke-width":sel?2.6:1.7},gStatic);
     if(LEVEL.freeCams&&!locked){                          // cámara reposicionable: área de trabajo + anillo + tirador
       const a=c.area||LEVEL.camArea;
+      if(LEVEL.shot){ if(a) el("rect",{x:m(a.x-a.w/2),y:m(a.y-a.h/2),width:m(a.w),height:m(a.h),rx:m(0.3),fill:"rgba(63,224,208,.04)",stroke:css("--cyan"),"stroke-width":1,"stroke-dasharray":"2 4",opacity:.45},gStatic); }
+      else{
       if(a) el("rect",{x:m(a.x-a.w/2),y:m(a.y-a.h/2),width:m(a.w),height:m(a.h),rx:m(1),fill:"rgba(63,224,208,.05)",stroke:css("--cyan"),"stroke-width":1,"stroke-dasharray":"2 4",opacity:.5},gStatic);
       el("circle",{cx:m(c.x),cy:m(c.y),r:m(2.6),fill:"none",stroke:css("--cyan"),"stroke-width":1,"stroke-dasharray":"1.5 2.5",opacity:.7},gStatic);
       el("circle",{cx:m(c.x),cy:m(c.y),r:14,fill:"transparent",style:"cursor:move","data-cam":i,class:"camdrag"},gPorts);
+      }
     }
-    const ly = dir==="up" ? m(c.y)+m(4.8) : m(c.y)-m(3.8);
-    const lb=el("text",{x:m(c.x),y:ly,fill:css("--txt"),"font-size":11,"letter-spacing":"0.5","text-anchor":"middle"},gStatic);
-    lb.textContent=c.id+(c.wireless?" · RF→"+c.rxFmt.toUpperCase():" · "+c.out.toUpperCase())+(c.res==="4k"?" 4K":"");
-    if(c.wireless){
+    if(LEVEL.shot){
+      const lb=el("text",{x:m(c.x),y:m(c.y)+m(1.4),fill:sel?css("--amber"):css("--txt"),"font-size":11,"letter-spacing":"0.5","text-anchor":"middle"},gStatic);
+      const L=(LEVEL.lenses||{})[c.lens];
+      lb.textContent=c.id+" · "+(L?tl(L.nombre):camFov(c)+"°");
+      // lo que da la cámara ahora mismo: tamaño de plano y ancho de campo sobre lo que tenga delante
+      const tgt=(LEVEL.plan||[]).find(pl=>pl.cam===i);
+      const fr=tgt?framing(i,tgt.subj):null;
+      if(fr){
+        const a=rad(c.ang), px=c.x+Math.cos(a)*1.8, py=c.y+Math.sin(a)*1.8;
+        const txt=(fr.out.length?tr('shot_none'):fr.talla+" · "+fr.fw.toFixed(1)+" m");
+        const w=(fr.out.length?86:104);
+        el("rect",{x:m(px)-w/2,y:m(py)-11,width:w,height:19,rx:4,fill:css("--bg"),stroke:fr.out.length?css("--dim"):css("--cyan"),"stroke-width":1,opacity:.92,"pointer-events":"none"},gStatic);
+        const t2=el("text",{x:m(px),y:m(py)+3,fill:fr.out.length?css("--dim"):css("--cyan"),"font-size":11,"font-weight":"bold","text-anchor":"middle","pointer-events":"none"},gStatic);
+        t2.textContent=txt;
+      }
+      if(!locked){                                       // tirador de orientación en el eje del cono
+        const a=rad(c.ang), R=3.2, hx=c.x+R*Math.cos(a), hy=c.y+R*Math.sin(a);
+        el("line",{x1:m(c.x),y1:m(c.y),x2:m(hx),y2:m(hy),stroke:css("--cyan"),"stroke-width":1,"stroke-dasharray":"2 3",opacity:.7},gStatic);
+        el("circle",{cx:m(hx),cy:m(hy),r:7,fill:css("--bg"),stroke:css("--cyan"),"stroke-width":2},gPorts);
+        el("circle",{cx:m(hx),cy:m(hy),r:17,fill:"transparent",style:"cursor:grab","data-cam":i,class:"aimdrag"},gPorts);
+        el("circle",{cx:m(c.x),cy:m(c.y),r:15,fill:"transparent",style:"cursor:move","data-cam":i,class:"camdrag"},gPorts);
+      }
+    }else{
+      const ly = (c.dir||"left")==="up" ? m(c.y)+m(4.8) : m(c.y)-m(3.8);
+      const lb=el("text",{x:m(c.x),y:ly,fill:css("--txt"),"font-size":11,"letter-spacing":"0.5","text-anchor":"middle"},gStatic);
+      lb.textContent=c.id+(c.wireless?" · RF→"+c.rxFmt.toUpperCase():" · "+c.out.toUpperCase())+(c.res==="4k"?" 4K":"");
+    }
+    if(LEVEL.shot){ /* sin cableado */ }
+    else if(c.wireless){
       const tx=el("text",{x:m(c.x),y:m(c.y)+m(4),fill:css("--amber"),"font-size":8,"letter-spacing":"1","text-anchor":"middle"},gStatic); tx.textContent="TX";
     }else{
       el("circle",{cx:m(c.port.x),cy:m(c.port.y),r:6,fill:css("--cyan")},gPorts);
       el("circle",{cx:m(c.port.x),cy:m(c.port.y),r:16,fill:"transparent",style:"cursor:grab","data-cam":i,class:"outport"},gPorts);
     }
   });
+}
+
+/* ============================================================
+   ENCUADRE (modo shot): qué ve cada cámara y con qué tamaño de plano
+   ============================================================ */
+// bandas de tamaño de plano por ANCHO DE CAMPO (m) a la distancia del sujeto
+const SHOT_SIZES=[
+  { k:"PP", max:0.7 },      // primer plano
+  { k:"PM", max:1.3 },      // plano medio
+  { k:"PA", max:1.9 },      // plano americano
+  { k:"PE", max:3.0 },      // plano entero
+  { k:"PG", max:Infinity }, // plano general
+];
+const deg=r=>r*180/Math.PI, rad=d=>d*Math.PI/180;
+const camFov=c=>{ const L=(LEVEL.lenses||{})[c.lens]; return L?L.fov:(c.fov||35); };
+const angTo=(c,p)=>deg(Math.atan2(p.y-c.y,p.x-c.x));                 // ángulo cámara→punto, 0 = eje +x
+const angDiff=(a,b)=>{ let d=(a-b)%360; if(d>180)d-=360; if(d<-180)d+=360; return d; };
+const inFrame=(c,p)=>Math.abs(angDiff(angTo(c,p),c.ang))<=camFov(c)/2;
+const frameWidth=(c,d)=>2*d*Math.tan(rad(camFov(c))/2);              // ancho de campo a esa distancia
+function shotSize(w){ for(const s of SHOT_SIZES) if(w<=s.max) return s.k; return "PG"; }
+function subjOf(id){ return (LEVEL.subjects||[]).find(s=>s.id===id); }
+
+// lo que da una cámara sobre un sujeto (o un grupo de sujetos)
+function framing(ci, ids){
+  const c=cams[ci], list=(Array.isArray(ids)?ids:[ids]).map(subjOf).filter(Boolean);
+  if(!list.length) return null;
+  const out=list.filter(sb=>!inFrame(c,sb));                          // los que se quedan fuera del cono
+  const d=list.reduce((s,sb)=>s+dist(c,sb),0)/list.length;
+  const fw=frameWidth(c,d);
+  // el ancho que hay que abarcar: el sujeto (o el grupo, con su separación) más un margen de aire
+  let need=list[0].size||0.5;
+  if(list.length>1){
+    let sep=0;
+    for(let i=0;i<list.length;i++)for(let j=i+1;j<list.length;j++) sep=Math.max(sep,dist(list[i],list[j]));
+    need=sep+(list[0].size||0.5);
+  }
+  return { d, fw, out, needW:need, talla:shotSize(fw), cabe:fw>=need };
 }
 
 /* ============================================================
@@ -1010,7 +1169,11 @@ svg.addEventListener("pointerdown",e=>{
   if(pointers.size>2) return;
   if(locked){ drag={kind:"pan",sx:e.clientX,sy:e.clientY,tx0:zoom.tx,ty0:zoom.ty}; return; }
   const t=e.target;
+  if(t.classList.contains("aimdrag")){                   // orientar la cámara (modo encuadre)
+    selCam=+t.dataset.cam; drag={kind:"aimcam",ci:selCam}; refreshInv(); drawStatic(); return;
+  }
   if(LEVEL.freeCams && t.classList.contains("camdrag")){ // reposicionar cámara (niveles altos)
+    if(LEVEL.shot){ selCam=+t.dataset.cam; refreshInv(); }
     drag={kind:"movecam",ci:+t.dataset.cam}; return;
   }
   if(mode==="conv" && curConv){                         // colocar conversor en cualquier puerto
@@ -1067,6 +1230,8 @@ svg.addEventListener("pointermove",e=>{
   if(!drag)return;
   if(drag.kind==="new"){ const p=toSvg(e); drag.line.setAttribute("x2",p.x); drag.line.setAttribute("y2",p.y); }
   else if(drag.kind==="pan"){ const a=toVB(drag.sx,drag.sy), b=toVB(e.clientX,e.clientY); zoom.tx=drag.tx0+(b.x-a.x); zoom.ty=drag.ty0+(b.y-a.y); applyZoom(); }
+  else if(drag.kind==="aimcam"){ const p=toSvg(e), c=cams[drag.ci];
+    c.ang=deg(Math.atan2(p.y/S-c.y, p.x/S-c.x)); drawStatic(); }
   else if(drag.kind==="movecam"){ const p=toSvg(e), P=LEVEL.planoM, c=cams[drag.ci], a=c.area||LEVEL.camArea;
     let nx=p.x/S, ny=p.y/S;
     if(a){ nx=Math.max(a.x-a.w/2,Math.min(a.x+a.w/2,nx)); ny=Math.max(a.y-a.h/2,Math.min(a.y+a.h/2,ny)); }
@@ -1161,7 +1326,28 @@ function updateHUD(){
       : `${sp.spread.toFixed(0)} ms · ${(sp.spread/frameMs()).toFixed(1)} f`;
   }
 }
+function validateShot(){                            // modo encuadre: se comprueba la pauta, no el cableado
+  const problemas=[];
+  (LEVEL.plan||[]).forEach(pl=>{
+    const c=cams[pl.cam]; if(!c)return;
+    const ids=Array.isArray(pl.subj)?pl.subj:[pl.subj];
+    const fr=framing(pl.cam, ids);
+    if(!fr)return;
+    const nombres=ids.map(id=>{const sb=subjOf(id);return sb?tl(sb.label||id):id;});
+    if(fr.out.length){                                // alguien se queda fuera del cono
+      problemas.push(tr('m_shotout')(c.id, fr.out.map(sb=>tl(sb.label||sb.id)).join(", ")));
+      return;
+    }
+    if(!fr.cabe){                                     // están en cuadro pero no caben con aire
+      problemas.push(tr('m_shottight')(c.id, nombres.join(" + "), fr.fw.toFixed(1), fr.needW.toFixed(1)));
+      return;
+    }
+    if(fr.talla!==pl.size) problemas.push(tr('m_shotsize')(c.id, pl.size, fr.talla, fr.fw.toFixed(1)));
+  });
+  return problemas;
+}
 function validate(){
+  if(LEVEL.shot) return finishValidate(validateShot());
   const problemas=[];
   cams.forEach((cam,ci)=>{
     const name=cam.id, c=cables[ci];
@@ -1197,15 +1383,21 @@ function validate(){
   }
   const t=totals();
   if(t.cost>LEVEL.budget) problemas.push(tr('m_budget')(t.cost.toFixed(0), LEVEL.budget));
+  return finishValidate(problemas);
+}
+function finishValidate(problemas){
+  const t=LEVEL.shot?{cost:0,total:0,convs:0}:totals();
 
-  locked=true; redrawCables();
+  locked=true; drawStatic(); redrawCables();
   const ok=problemas.length===0;
-  const k=document.getElementById("win-k");
-  k.textContent=ok?tr('valid_k'):tr('invalid_k');
+  const k=document.getElementById("win-k"), sh=LEVEL.shot;
+  k.textContent=ok?tr(sh?'valid_k_shot':'valid_k'):tr(sh?'invalid_k_shot':'invalid_k');
   k.style.color=ok?css("--cyan"):css("--red");
-  document.getElementById("win-h").textContent=ok?tr('valid_h'):tr('invalid_h');
+  document.getElementById("win-h").textContent=ok?tr(sh?'valid_h_shot':'valid_h'):tr(sh?'invalid_h_shot':'invalid_h');
   const res=document.getElementById("win-res");
-  if(ok){
+  if(ok&&LEVEL.shot){
+    res.innerHTML=`<div class="good">${tr('w_shotok')(cams.length)}</div>`;
+  }else if(ok){
     const sobra=LEVEL.budget-t.cost;
     res.innerHTML=`<div class="good">${tr('w_ok')(cams.length)}</div><br>`+
       tr('w_cost')(t.cost.toFixed(0), t.total.toFixed(0), t.convs)+`<br>`+
@@ -1221,6 +1413,32 @@ function validate(){
    ============================================================ */
 function buildInv(){
   const cablesBox=document.getElementById("inv"); cablesBox.innerHTML="";
+  const planBox=document.getElementById("plan");
+  document.getElementById("planBlock").style.display=LEVEL.shot?"":"none";
+  document.querySelector('[data-i18n="inv_cable"]').textContent=LEVEL.shot?tr('inv_lens'):tr('inv_cable');
+  if(LEVEL.shot){                                        // inventario de ópticas + pauta
+    Object.entries(LEVEL.lenses||{}).forEach(([key,L])=>{
+      const b=document.createElement("button");
+      b.className="invbtn"; b.dataset.kind="lens"; b.dataset.key=key;
+      b.innerHTML=`<span><span class="nm">${tl(L.nombre)}</span><span class="meta">${L.fov}° ${tr('meta_lens')}</span></span><span class="dot" style="background:var(--cyan)"></span>`;
+      b.addEventListener("click",()=>{ cams[selCam].lens=key; drawStatic(); refreshInv(); });
+      cablesBox.appendChild(b);
+    });
+    planBox.innerHTML="";
+    (LEVEL.plan||[]).forEach(pl=>{
+      const subj=(Array.isArray(pl.subj)?pl.subj:[pl.subj]).map(id=>{const sb=subjOf(id);return sb?tl(sb.label||id):id;}).join(" + ");
+      const row=document.createElement("div");
+      row.className="stat"; row.style.cursor="pointer";
+      row.innerHTML=`<span class="lbl">${cams[pl.cam]?cams[pl.cam].id:"CAM"}</span><span class="val">${pl.size} · ${subj}</span>`;
+      row.addEventListener("click",()=>{ selCam=pl.cam; drawStatic(); refreshInv(); });
+      planBox.appendChild(row);
+    });
+    document.getElementById("convs").innerHTML=""; document.getElementById("elems").innerHTML="";
+    document.getElementById("convBlock").style.display="none";
+    document.getElementById("elemBlock").style.display="none";
+    document.getElementById("statusBlock").style.display="none";
+    refreshInv(); return;
+  }
   Object.entries(LEVEL.cableTypes).forEach(([key,ct])=>{
     const b=document.createElement("button");
     b.className="invbtn"; b.dataset.kind="cable"; b.dataset.key=key;
@@ -1228,6 +1446,7 @@ function buildInv(){
     b.addEventListener("click",()=>{mode="cable";curType=key;refreshInv();});
     cablesBox.appendChild(b);
   });
+  document.getElementById("plan").innerHTML="";
   const convBox=document.getElementById("convs"); convBox.innerHTML="";
   Object.entries(LEVEL.converters).forEach(([key,cv])=>{
     const b=document.createElement("button");
@@ -1269,11 +1488,25 @@ function buildInv(){
     elemBox.appendChild(db);
   }
   // ocultar secciones que este nivel no usa
+  document.getElementById("statusBlock").style.display="";
   document.getElementById("convBlock").style.display = Object.keys(LEVEL.converters).length ? "" : "none";
   document.getElementById("elemBlock").style.display = (hasRamp||hasWireless||hasDec||LEVEL.sync) ? "" : "none";
   refreshInv();
 }
 function refreshInv(){
+  if(LEVEL&&LEVEL.shot){
+    const c=cams[selCam];
+    document.querySelectorAll(".invbtn").forEach(b=>{
+      const on=(b.dataset.kind==="lens"&&c&&b.dataset.key===c.lens);
+      b.classList.toggle("on",on);
+      b.style.color=on?css("--cyan"):""; b.style.borderColor=on?css("--cyan"):"";
+    });
+    document.querySelectorAll("#plan .stat").forEach((r,i)=>{
+      const pl=(LEVEL.plan||[])[i];
+      r.style.opacity=(pl&&pl.cam===selCam)?"1":".55";
+    });
+    return;
+  }
   document.querySelectorAll(".invbtn").forEach(b=>{
     const kind=b.dataset.kind, key=b.dataset.key;
     const on=(kind==="cable"&&mode==="cable"&&key===curType)||(kind==="conv"&&mode==="conv"&&key===curConv)||(kind==="ramp"&&mode==="ramp")||(kind==="rx"&&mode==="rx")||(kind==="dec"&&mode==="dec")||(kind==="fs"&&frameSync);
@@ -1302,7 +1535,7 @@ function cargarNivel(vid,idx){
   S=LEVEL.escalaPxM;
   VBW=m(LEVEL.planoM.w); VBH=m(LEVEL.planoM.h);
   svg.setAttribute("viewBox",`0 0 ${VBW} ${VBH}`);
-  inputs=[]; { const n=nInputs(), faces=LEVEL.mesa.faces||"top";
+  inputs=[]; if(!LEVEL.shot){ const n=nInputs(), faces=LEVEL.mesa.faces||"top";
     for(let i=0;i<n;i++) inputs.push(faces==="left"
       ? {x:LEVEL.mesa.x-8, y:LEVEL.mesa.y+(i-(n-1)/2)*6}
       : {x:LEVEL.mesa.x+(i-(n-1)/2)*6, y:LEVEL.mesa.y-4}); }
@@ -1310,7 +1543,8 @@ function cargarNivel(vid,idx){
   cables=new Array(cams.length).fill(null);
   camConv=new Array(cams.length).fill(null);
   inConv=new Array(inputs.length).fill(null);
-  ramps=[]; rx={}; camDec=new Array(cams.length).fill(false); curType=Object.keys(LEVEL.cableTypes)[0]; curConv=null; mode="cable"; locked=false;
+  ramps=[]; rx={}; camDec=new Array(cams.length).fill(false); curConv=null; mode="cable"; locked=false;
+  curType=LEVEL.cableTypes?Object.keys(LEVEL.cableTypes)[0]:null; frameSync=false; selCam=0;
   zoom.k=1; zoom.tx=0; zoom.ty=0; applyZoom();
   document.getElementById("nivel").textContent=pick(LEVEL.nombre);
   document.getElementById("encargo").textContent=pick(LEVEL.encargo);
@@ -1320,18 +1554,20 @@ function cargarNivel(vid,idx){
 }
 function reset(){
   if(!LEVEL)return;
+  cams=LEVEL.cams.map(c=>({...c, port:{x:c.x+3, y:c.y}}));   // vuelven a su posición/ángulo/óptica inicial
   cables=new Array(cams.length).fill(null);
   camConv=new Array(cams.length).fill(null);
   inConv=new Array(inputs.length).fill(null);
   ramps.length=0; rx={}; camDec=new Array(cams.length).fill(false); locked=false; frameSync=false;
   document.getElementById("win").classList.remove("show");
-  redrawCables(); updateHUD();
+  drawStatic(); redrawCables(); updateHUD();
 }
 
 function updateHint(){                          // cada aviso solo sale si el nivel lo usa
   const hasExit=((LEVEL&&LEVEL.zones)||[]).some(z=>zoneBlock(z)==="forbid");
   const hasRF=(LEVEL?cams:[]).some(c=>c.wireless);
   const tol=(LEVEL&&LEVEL.syncTolMs!==undefined)?LEVEL.syncTolMs:SYNC_TOL_MS;
+  if(LEVEL&&LEVEL.shot){ document.getElementById("hint").innerHTML=tr("hint_shot"); return; }
   document.getElementById("hint").innerHTML=tr("hint")+(hasRF?" "+tr("hint_rf"):"")+(hasExit?" "+tr("hint_exit"):"")+((LEVEL&&LEVEL.sync)?" "+tr("hint_sync")(tol,(LEVEL.fps||25)):"");
 }
 function applyLang(){
