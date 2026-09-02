@@ -129,6 +129,7 @@
       <div class="stat"><span class="lbl" data-i18n="st_total">Metraje total</span><span class="val" id="s-total">0 m</span></div>
       <div class="stat"><span class="lbl" data-i18n="st_conv">Conversores</span><span class="val" id="s-conv">0</span></div>
       <div class="stat"><span class="lbl" data-i18n="st_ramps">Pasacables</span><span class="val" id="s-ramps">0</span></div>
+      <div class="stat" id="row-lat"><span class="lbl" data-i18n="st_lat">Desfase</span><span class="val" id="s-lat">0 ms</span></div>
       <div class="stat"><span class="lbl" data-i18n="st_budget">Presupuesto</span><span class="val" id="s-budget">—</span></div>
     </div>
 
@@ -174,7 +175,7 @@ const STR = {
     eyebrow:"CIFP TARTANGA · REALIZACIÓN",
     inv_cable:"Inventario · tipo de cable", inv_conv:"Conversores", inv_elem:"Elementos",
     status:"Estado", st_conn:"Cámaras conectadas", st_total:"Metraje total", st_conv:"Conversores",
-    st_ramps:"Pasacables", st_budget:"Presupuesto", howto:"Cómo se juega",
+    st_ramps:"Pasacables", st_lat:"Desfase", st_budget:"Presupuesto", howto:"Cómo se juega",
     btn_validate:"Ya lo tengo · Validar", btn_reset:"Reiniciar plano", btn_retry:"Reintentar", btn_review:"Revisar plano",
     menu_title:"Elige un tipo de evento", menu_sub:"Cada recinto sube de dificultad en sus niveles.", soon:"Próximamente",
     result:"RESULTADO", valid_k:"INSTALACIÓN VÁLIDA", invalid_k:"REVISA LA INSTALACIÓN",
@@ -182,7 +183,9 @@ const STR = {
     ramp_name:"Pasacables", rx_name:"Receptor (RX)",
     meta_conv:"€ · toca cámara o entrada", meta_ramp:"€ · toca un pasillo (lo comparten varias cámaras)", meta_rx:"toca cerca de la cámara inalámbrica (dentro del alcance RF)",
     dec_name:"Decimator", meta_dec:"€ · toca una cámara (invierte HD↔4K)",
+    fs_name:"Frame sync (mesa)", meta_fs:"€ · alinea todas las entradas", lat_synced:"sincronizado",
     hint:`Elige el <b>tipo de cable</b> y arrastra desde el <b>objetivo</b> de la cámara a una <b>entrada</b> de la mesa. <b>Tira del cable</b> para curvarlo (suma metros); rodea las butacas (los pasillos se cruzan libres). Si el nivel trae conversores, colócalos tocando cámara o entrada — ojo al sentido. El juego <b>no te avisa</b> si algo no encaja: pulsa <b>Ya lo tengo</b> para validar. Pellizca para acercar.`,
+    hint_sync:(tol,fps)=>`⏱ <b>Latencia</b>: la RF, el IP y los conversores retrasan la imagen; la fibra y el SDI no. A ${fps}p un frame son ${(1000/fps).toFixed(0)} ms, y la mesa aguanta ${tol} ms de desfase: por encima, el corte salta. O igualas los caminos, o pagas un frame sync.`,
     hint_rf:`📡 <b>Inalámbrica</b>: el receptor (RX) necesita <b>alcance</b> Y <b>línea de vista</b> — la RF no atraviesa torres, columnas ni muros (el público sí la deja pasar). Colócalo donde se pueda acceder.`,
     hint_exit:`⛔ <b>Vía de evacuación</b> (roja): normativa de seguridad. El cable <b>no la cruza nunca</b>, ni con pasacables — rodéala. Tampoco se coloca ahí una cámara ni un receptor.`,
     m_notconn:n=>`${n}: sin conectar a la mesa.`,
@@ -199,6 +202,7 @@ const STR = {
     m_resmesa:(n,r,mr)=>`${n}: la señal llega en ${r} y la mesa trabaja en ${mr} (usa un Decimator).`,
     m_norx:n=>`${n}: sin receptor (RX) colocado.`,
     m_range:(n,d,r)=>`${n}: el receptor está a ${d} m, fuera del alcance RF (${r} m).`,
+    m_sync:(n,ms,fr,tol)=>`Fuentes sin sincronizar: ${n} llega ${ms} ms (${fr} frames) más tarde que la más rápida, y la mesa solo aguanta ${tol} ms. Iguala los caminos o pon un frame sync.`,
     m_los:(n,o)=>`${n}: no hay línea de vista con el receptor — ${o||"una estructura"} se interpone. La RF no atraviesa estructuras.`,
     w_ok:n=>`Las ${n} cámaras entregan señal dentro de presupuesto.`,
     w_cost:(c,tt,cv)=>`Coste: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} conversores.`,
@@ -211,7 +215,7 @@ const STR = {
     eyebrow:"CIFP TARTANGA · TV DIRECTING",
     inv_cable:"Inventory · cable type", inv_conv:"Converters", inv_elem:"Devices",
     status:"Status", st_conn:"Cameras connected", st_total:"Total cable", st_conv:"Converters",
-    st_ramps:"Cable ramps", st_budget:"Budget", howto:"How to play",
+    st_ramps:"Cable ramps", st_lat:"Offset", st_budget:"Budget", howto:"How to play",
     btn_validate:"I'm done · Validate", btn_reset:"Reset plan", btn_retry:"Retry", btn_review:"Review plan",
     menu_title:"Choose an event type", menu_sub:"Each venue ramps up difficulty across its levels.", soon:"Coming soon",
     result:"RESULT", valid_k:"INSTALLATION VALID", invalid_k:"REVIEW THE INSTALLATION",
@@ -219,7 +223,9 @@ const STR = {
     ramp_name:"Cable ramp", rx_name:"Receiver (RX)",
     meta_conv:"€ · tap a camera or input", meta_ramp:"€ · tap an aisle (shared by cameras)", meta_rx:"tap near the wireless camera (within RF range)",
     dec_name:"Decimator", meta_dec:"€ · tap a camera (flips HD↔4K)",
+    fs_name:"Frame sync (desk)", meta_fs:"€ · aligns every input", lat_synced:"in sync",
     hint:`Pick a <b>cable type</b> and drag from the camera's <b>output</b> to a desk <b>input</b>. <b>Pull the cable</b> to bend it (adds metres); route around the seating (aisles are free to cross). If the level has converters, place them by tapping a camera or input — mind the direction. The game <b>won't warn you</b> if something doesn't fit: press <b>I'm done</b> to validate. Pinch to zoom.`,
+    hint_sync:(tol,fps)=>`⏱ <b>Latency</b>: RF, IP and converters delay the picture; fibre and SDI don't. At ${fps}p a frame is ${(1000/fps).toFixed(0)} ms, and the desk tolerates ${tol} ms of offset: beyond that the cut jumps. Either match the paths or pay for a frame sync.`,
     hint_rf:`📡 <b>Wireless</b>: the receiver (RX) needs <b>range</b> AND <b>line of sight</b> — RF doesn't go through towers, columns or walls (the crowd does let it through). Place it somewhere reachable.`,
     hint_exit:`⛔ <b>Escape route</b> (red): safety regulation. The cable <b>never</b> crosses it, not even with a ramp — route around. No camera or receiver may sit there either.`,
     m_notconn:n=>`${n}: not connected to the desk.`,
@@ -236,6 +242,7 @@ const STR = {
     m_resmesa:(n,r,mr)=>`${n}: the signal arrives in ${r} and the desk works in ${mr} (use a Decimator).`,
     m_norx:n=>`${n}: no receiver (RX) placed.`,
     m_range:(n,d,r)=>`${n}: the receiver is ${d} m away, out of RF range (${r} m).`,
+    m_sync:(n,ms,fr,tol)=>`Sources out of sync: ${n} arrives ${ms} ms (${fr} frames) later than the fastest one, and the desk only tolerates ${tol} ms. Match the paths or add a frame sync.`,
     m_los:(n,o)=>`${n}: no line of sight to the receiver — ${o||"a structure"} is in the way. RF doesn't go through structures.`,
     w_ok:n=>`All ${n} cameras deliver signal within budget.`,
     w_cost:(c,tt,cv)=>`Cost: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} converters.`,
@@ -248,7 +255,7 @@ const STR = {
     eyebrow:"CIFP TARTANGA · ERREALIZAZIOA",
     inv_cable:"Inbentarioa · kable mota", inv_conv:"Bihurgailuak", inv_elem:"Gailuak",
     status:"Egoera", st_conn:"Konektatutako kamerak", st_total:"Kable metroak guztira", st_conv:"Bihurgailuak",
-    st_ramps:"Kable-arrapalak", st_budget:"Aurrekontua", howto:"Nola jokatu",
+    st_ramps:"Kable-arrapalak", st_lat:"Desfasea", st_budget:"Aurrekontua", howto:"Nola jokatu",
     btn_validate:"Prest nago · Balidatu", btn_reset:"Planoa berrezarri", btn_retry:"Berriz saiatu", btn_review:"Planoa berrikusi",
     menu_title:"Aukeratu ekitaldi mota", menu_sub:"Areto bakoitzak zailtasuna igotzen du bere mailetan.", soon:"Laster",
     result:"EMAITZA", valid_k:"INSTALAZIO BALIODUNA", invalid_k:"BERRIKUSI INSTALAZIOA",
@@ -256,7 +263,9 @@ const STR = {
     ramp_name:"Kable-arrapala", rx_name:"Hartzailea (RX)",
     meta_conv:"€ · ukitu kamera bat edo sarrera bat", meta_ramp:"€ · ukitu korridore bat (kamerek partekatzen dute)", meta_rx:"ukitu haririk gabeko kameratik gertu (RF irismenaren barruan)",
     dec_name:"Decimator", meta_dec:"€ · ukitu kamera bat (HD↔4K trukatzen du)",
+    fs_name:"Frame sync (mahaia)", meta_fs:"€ · sarrera guztiak lerrokatzen ditu", lat_synced:"sinkronizatuta",
     hint:`Aukeratu <b>kable mota</b> eta arrastatu kameraren <b>objektibotik</b> mahaiaren <b>sarrera</b> batera. <b>Tira egin kableari</b> okertzeko (metroak batzen ditu); saihestu besaulkiak (korridoreak libre gurutza daitezke). Mailak bihurgailuak baditu, jarri kamera edo sarrera ukituz — kontuz noranzkoarekin. Jokoak <b>ez dizu abisatzen</b> zerbait ondo ez badago: sakatu <b>Prest nago</b> balidatzeko. Atximurkatu gerturatzeko.`,
+    hint_sync:(tol,fps)=>`⏱ <b>Latentzia</b>: RFak, IPak eta bihurgailuek irudia atzeratzen dute; zuntzak eta SDIk ez. ${fps}p-tan frame bat ${(1000/fps).toFixed(0)} ms da, eta mahaiak ${tol} ms-ko desfasea onartzen du: horretatik gora, planoen arteko mozketak salto egiten du. Edo bideak berdintzen dituzu, edo frame sync bat ordaintzen duzu.`,
     hint_rf:`📡 <b>Haririk gabekoa</b>: hartzaileak (RX) <b>irismena</b> ETA <b>ikuspegi-lerroa</b> behar ditu — RFak ez ditu dorreak, zutabeak edo hormak zeharkatzen (jendeak bai uzten dio pasatzen). Jarri sarbidea dagoen lekuan.`,
     hint_exit:`⛔ <b>Ebakuazio-bidea</b> (gorria): segurtasun-araudia. Kableak <b>ez du inoiz gurutzatzen</b>, ezta arrapalarekin ere — saihestu. Ezin da han kamerarik ez hartzailerik jarri.`,
     m_notconn:n=>`${n}: mahaira konektatu gabe.`,
@@ -273,6 +282,7 @@ const STR = {
     m_resmesa:(n,r,mr)=>`${n}: seinalea ${r}-n iristen da eta mahaiak ${mr}-n lan egiten du (erabili Decimator bat).`,
     m_norx:n=>`${n}: hartzailerik (RX) jarri gabe.`,
     m_range:(n,d,r)=>`${n}: hartzailea ${d} m-ra dago, RF irismenetik kanpo (${r} m).`,
+    m_sync:(n,ms,fr,tol)=>`Iturriak sinkronizatu gabe: ${n} ${ms} ms (${fr} frame) beranduago iristen da azkarrena baino, eta mahaiak ${tol} ms baino ez ditu onartzen. Berdindu bideak edo jarri frame sync bat.`,
     m_los:(n,o)=>`${n}: ez dago ikuspegi-lerrorik hartzailearekin — ${o||"egitura bat"} tartean dago. RFak ez ditu egiturak zeharkatzen.`,
     w_ok:n=>`${n} kamerek seinalea ematen dute aurrekontuaren barruan.`,
     w_cost:(c,tt,cv)=>`Kostua: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} bihurgailu.`,
@@ -394,7 +404,7 @@ const TEATRO_N3 = {
     sdi:   { nombre:"HD-SDI",   signal:"sdi",  limite:100, eurM:3,   conv:0, color:"--cyan"  },
     fibra: { nombre:"Fibra",    signal:"sdi",  limite:500, eurM:10,  conv:2, color:"--fiber" },
     hdmi:  { nombre:"HDMI",     signal:"hdmi", limite:15,  eurM:1.5, conv:0, color:"--amber" },
-    eth:   { nombre:"Ethernet", signal:"ip",   limite:100, eurM:2,   conv:0, color:"--eth"   },
+    eth:   { nombre:"Ethernet", signal:"ip", ms:80,   limite:100, eurM:2,   conv:0, color:"--eth"   },
   },
   converters: {
     hdmi_sdi: { nombre:"HDMI→SDI", tag:"H→S", from:"hdmi", to:"sdi",  eur:180 },
@@ -566,9 +576,10 @@ const SETTV_N3 = {
 
 const CONCIERTO_N3 = {
   nombre:  { es:"Concierto · Nivel 3", en:"Concert · Level 3", eu:"Kontzertua · 3. maila" },
-  encargo: { es:"Arena enorme: distancias descomunales. Las cámaras del foso solo llegan por FIBRA; las de fondo, por SDI. Y una grúa inalámbrica en pista: coloca su RX dentro del alcance y con línea de vista (la torre de FOH se interpone). Presupuesto grande, pero ojo.",
-             en:"Huge arena: massive distances. The pit cameras only reach on FIBRE; the rear ones on SDI. Plus a wireless jib on the floor: place its RX within range and with line of sight (the FOH tower gets in the way). Big budget, but be careful.",
-             eu:"Areto erraldoia: distantzia izugarriak. Hobiko kamerak ZUNTZAren bidez baino ez dira iristen; atzekoak SDI bidez. Gainera, haririk gabeko garabi bat pistan: jarri bere RX irismenaren barruan eta ikuspegi-lerroarekin (FOH dorrea tartean dago). Aurrekontu handia, baina kontuz." },
+  encargo: { es:"Arena enorme: distancias descomunales. Las cámaras del foso solo llegan por FIBRA; las de fondo, por SDI. Y una grúa inalámbrica en pista: coloca su RX dentro del alcance y con línea de vista (la torre de FOH se interpone). Ojo además a la LATENCIA: el enlace RF llega un frame tarde y la mesa no lo aguanta — necesitarás un frame sync. Presupuesto grande, pero ojo.",
+             en:"Huge arena: massive distances. The pit cameras only reach on FIBRE; the rear ones on SDI. Plus a wireless jib on the floor: place its RX within range and with line of sight (the FOH tower gets in the way). Mind LATENCY too: the RF link arrives a frame late and the desk won't take it — you'll need a frame sync. Big budget, but be careful.",
+             eu:"Areto erraldoia: distantzia izugarriak. Hobiko kamerak ZUNTZAren bidez baino ez dira iristen; atzekoak SDI bidez. Gainera, haririk gabeko garabi bat pistan: jarri bere RX irismenaren barruan eta ikuspegi-lerroarekin (FOH dorrea tartean dago). Kontuz LATENTZIArekin ere: RF loturak frame bat beranduago iristen da eta mahaiak ez du onartzen — frame sync bat beharko duzu. Aurrekontu handia, baina kontuz." },
+  sync: true, fps: 25, syncTolMs: 20, fsEur: 900,   // capa de latencia: la RF llega un frame tarde
   planoM:  { w:210, h:120 },
   escalaPxM: 5.2,
   mesa: { x:198, y:60, inputs:5, inFmt:"sdi", faces:"left" },
@@ -577,7 +588,7 @@ const CONCIERTO_N3 = {
     { id:"CAM 2", x:38,  y:90, out:"sdi" },   // foso → fibra
     { id:"CAM 3", x:186, y:30, out:"sdi" },   // fondo → SDI
     { id:"CAM 4", x:186, y:90, out:"sdi" },   // fondo → SDI
-    { id:"CAM 5", x:64,  y:60, out:"sdi", wireless:true, rxFmt:"sdi", range:135, txEur:800 },  // grúa inalámbrica
+    { id:"CAM 5", x:64,  y:60, out:"sdi", wireless:true, rxFmt:"sdi", range:135, txEur:800, rfMs:40 },  // grúa inalámbrica: el enlace RF cuesta un frame
   ],
   zones: [
     { shape:"rect",   kind:"stage",   x:16,  y:60, w:24,  h:104, label:"ESCENARIO" },
@@ -597,7 +608,7 @@ const CONCIERTO_N3 = {
   },
   converters: {},
   convEur: 250,
-  budget: 5800,
+  budget: 7800,
 };
 
 const TEATRO_N4 = {
@@ -661,7 +672,7 @@ let LEVEL=null, S=10, inputs=[], cams=[], VBW=0, VBH=0;
 const m=v=>v*S;                                   // metros → px de dibujo (lee la S actual)
 
 let cables=[], camConv=[], inConv=[], ramps=[], rx={}, camDec=[];   // rx[ci]={x,y}=receptor inalámbrico; camDec[ci]=true si hay Decimator
-let curType=null, curConv=null, mode="cable", locked=false;
+let curType=null, curConv=null, mode="cable", locked=false, frameSync=false;
 const ctOf=ci=>LEVEL.cableTypes[cables[ci].type];
 
 /* ============================================================
@@ -896,9 +907,10 @@ function redrawCables(){
       el("circle",{cx:m(w.x),cy:m(w.y),r:15,fill:"transparent","data-cam":ci,"data-wp":wi,class:"wp",style:"cursor:grab"},gCables);
     });
     const cx=p.reduce((s,q)=>s+q.x,0)/p.length, cy=p.reduce((s,q)=>s+q.y,0)/p.length;
-    el("rect",{x:m(cx)-46,y:m(cy)-13,width:92,height:22,rx:4,fill:css("--bg"),stroke:col,"stroke-width":1,opacity:.92},gCables);
+    const lw=LEVEL.sync?124:92;
+    el("rect",{x:m(cx)-lw/2,y:m(cy)-13,width:lw,height:22,rx:4,fill:css("--bg"),stroke:col,"stroke-width":1,opacity:.92},gCables);
     const t=el("text",{x:m(cx),y:m(cy)+3,fill:col,"font-size":13,"font-weight":"bold","text-anchor":"middle"},gCables);
-    t.textContent=len.toFixed(0)+" m · "+cableTag(ct);
+    t.textContent=len.toFixed(0)+" m · "+cableTag(ct)+(LEVEL.sync?" · "+camLatency(ci)+" ms":"");
   });
   // insignias de conversores
   const badge=(pos,tag,bad)=>{
@@ -1093,6 +1105,29 @@ svg.addEventListener("wheel",e=>{
 /* ============================================================
    HUD + VALIDACIÓN
    ============================================================ */
+const SYNC_TOL_MS=20, RF_MS=40, CONV_MS=20;        // por defecto: medio frame a 25p, enlace RF, conversor con framestore
+const frameMs=()=>1000/(LEVEL.fps||25);
+function camLatency(ci){                           // retardo acumulado del camino de una cámara, en ms
+  const c=cables[ci]; if(!c) return 0;
+  const cam=cams[ci], ct=LEVEL.cableTypes[c.type];
+  let ms=0;
+  if(cam.wireless) ms+=(cam.rfMs!==undefined?cam.rfMs:RF_MS);      // TX/RF + RX
+  ms+=(ct.ms||0);                                                  // el transporte: SDI y fibra 0, IP comprime
+  const cvc=camConv[ci]&&LEVEL.converters[camConv[ci]];
+  if(cvc) ms+=(cvc.ms!==undefined?cvc.ms:CONV_MS);
+  const cvi=inConv[c.input]&&LEVEL.converters[inConv[c.input]];
+  if(cvi) ms+=(cvi.ms!==undefined?cvi.ms:CONV_MS);
+  if(camDec[ci]) ms+=(LEVEL.decMs||0);
+  return ms;
+}
+function syncSpread(){                             // desfase entre la cámara más rápida y la más lenta
+  let max=-1,min=1e9,worst=-1;
+  cables.forEach((c,ci)=>{ if(!c)return; const l=camLatency(ci);
+    if(l>max){max=l;worst=ci;} if(l<min)min=l; });
+  if(worst<0) return {spread:0,max:0,min:0,worst:-1};
+  return {spread:max-min, max, min, worst};
+}
+
 function totals(){
   let conn=0,total=0,convs=0,cost=0,allOk=true;
   cables.forEach((c,ci)=>{
@@ -1108,6 +1143,7 @@ function totals(){
   cost+=ramps.length*LEVEL.rampEur;
   cams.forEach((c,ci)=>{ if(c.wireless && rx[ci]) cost+=c.txEur; });   // par TX+RX de cada inalámbrica colocada
   camDec.forEach(d=>{ if(d) cost+=(LEVEL.decEur||250); });             // Decimator por cámara
+  if(LEVEL.sync&&frameSync) cost+=(LEVEL.fsEur||0);                    // frame sync de mesa (compra única)
   return {conn,total,convs,cost,allOk,within:cost<=LEVEL.budget,ramps:ramps.length};
 }
 function updateHUD(){
@@ -1117,6 +1153,13 @@ function updateHUD(){
   document.getElementById("s-conv").textContent=`${t.convs}`;
   document.getElementById("s-ramps").textContent=`${t.ramps}`;
   document.getElementById("s-budget").textContent=`${t.cost.toFixed(0)} / ${LEVEL.budget} €`;
+  document.getElementById("row-lat").style.display=LEVEL.sync?"":"none";
+  if(LEVEL.sync){
+    const sp=syncSpread();
+    document.getElementById("s-lat").textContent = frameSync
+      ? tr('lat_synced')
+      : `${sp.spread.toFixed(0)} ms · ${(sp.spread/frameMs()).toFixed(1)} f`;
+  }
 }
 function validate(){
   const problemas=[];
@@ -1148,6 +1191,10 @@ function validate(){
     if(rp==="cable") problemas.push(tr('m_res4k')(name, tcable(ct.nombre)));
     else if(rp==="mesa") problemas.push(tr('m_resmesa')(name, effRes(ci).toUpperCase(), mesaRes().toUpperCase()));
   });
+  if(LEVEL.sync&&!frameSync){                       // todas las señales tienen que llegar a la vez a la mesa
+    const tol=LEVEL.syncTolMs!==undefined?LEVEL.syncTolMs:SYNC_TOL_MS, sp=syncSpread();
+    if(sp.spread>tol) problemas.push(tr('m_sync')(cams[sp.worst].id, sp.spread.toFixed(0), (sp.spread/frameMs()).toFixed(1), tol));
+  }
   const t=totals();
   if(t.cost>LEVEL.budget) problemas.push(tr('m_budget')(t.cost.toFixed(0), LEVEL.budget));
 
@@ -1206,6 +1253,13 @@ function buildInv(){
     wb.addEventListener("click",()=>{mode="rx";refreshInv();});
     elemBox.appendChild(wb);
   }
+  if(LEVEL.sync){
+    const fb=document.createElement("button");
+    fb.className="invbtn"; fb.dataset.kind="fs"; fb.dataset.key="fs";
+    fb.innerHTML=`<span><span class="nm">${tr('fs_name')}</span><span class="meta">${LEVEL.fsEur||0} ${tr('meta_fs')}</span></span><span class="dot" style="background:var(--eth)"></span>`;
+    fb.addEventListener("click",()=>{ frameSync=!frameSync; refreshInv(); updateHUD(); redrawCables(); });
+    elemBox.appendChild(fb);
+  }
   const hasDec = cams.some(c=>c.res) || mesaRes()!=="hd";
   if(hasDec){
     const db=document.createElement("button");
@@ -1216,14 +1270,14 @@ function buildInv(){
   }
   // ocultar secciones que este nivel no usa
   document.getElementById("convBlock").style.display = Object.keys(LEVEL.converters).length ? "" : "none";
-  document.getElementById("elemBlock").style.display = (hasRamp||hasWireless||hasDec) ? "" : "none";
+  document.getElementById("elemBlock").style.display = (hasRamp||hasWireless||hasDec||LEVEL.sync) ? "" : "none";
   refreshInv();
 }
 function refreshInv(){
   document.querySelectorAll(".invbtn").forEach(b=>{
     const kind=b.dataset.kind, key=b.dataset.key;
-    const on=(kind==="cable"&&mode==="cable"&&key===curType)||(kind==="conv"&&mode==="conv"&&key===curConv)||(kind==="ramp"&&mode==="ramp")||(kind==="rx"&&mode==="rx")||(kind==="dec"&&mode==="dec");
-    const c=kind==="cable"?css(LEVEL.cableTypes[key].color):(kind==="dec"?css("--fiber"):(kind==="ramp"||kind==="rx")?css("--amber"):css("--txt"));
+    const on=(kind==="cable"&&mode==="cable"&&key===curType)||(kind==="conv"&&mode==="conv"&&key===curConv)||(kind==="ramp"&&mode==="ramp")||(kind==="rx"&&mode==="rx")||(kind==="dec"&&mode==="dec")||(kind==="fs"&&frameSync);
+    const c=kind==="cable"?css(LEVEL.cableTypes[key].color):(kind==="dec"?css("--fiber"):(kind==="fs"?css("--eth"):((kind==="ramp"||kind==="rx")?css("--amber"):css("--txt"))));
     b.classList.toggle("on",on);
     b.style.color=on?c:""; b.style.borderColor=on?c:"";
   });
@@ -1269,7 +1323,7 @@ function reset(){
   cables=new Array(cams.length).fill(null);
   camConv=new Array(cams.length).fill(null);
   inConv=new Array(inputs.length).fill(null);
-  ramps.length=0; rx={}; camDec=new Array(cams.length).fill(false); locked=false;
+  ramps.length=0; rx={}; camDec=new Array(cams.length).fill(false); locked=false; frameSync=false;
   document.getElementById("win").classList.remove("show");
   redrawCables(); updateHUD();
 }
@@ -1277,7 +1331,8 @@ function reset(){
 function updateHint(){                          // cada aviso solo sale si el nivel lo usa
   const hasExit=((LEVEL&&LEVEL.zones)||[]).some(z=>zoneBlock(z)==="forbid");
   const hasRF=(LEVEL?cams:[]).some(c=>c.wireless);
-  document.getElementById("hint").innerHTML=tr("hint")+(hasRF?" "+tr("hint_rf"):"")+(hasExit?" "+tr("hint_exit"):"");
+  const tol=(LEVEL&&LEVEL.syncTolMs!==undefined)?LEVEL.syncTolMs:SYNC_TOL_MS;
+  document.getElementById("hint").innerHTML=tr("hint")+(hasRF?" "+tr("hint_rf"):"")+(hasExit?" "+tr("hint_exit"):"")+((LEVEL&&LEVEL.sync)?" "+tr("hint_sync")(tol,(LEVEL.fps||25)):"");
 }
 function applyLang(){
   document.querySelectorAll("[data-i18n]").forEach(e=>{ e.textContent=tr(e.dataset.i18n); });
