@@ -194,6 +194,10 @@ const STR = {
     hint_shot:`🎥 <b>Encuadres</b>: aquí no se cablea. Toca una cámara para seleccionarla, <b>arrastra el tirador</b> de su cono para orientarla y muévela dentro de su área. La óptica abre o cierra el ángulo: el <b>ancho de campo</b> que ves depende de la distancia y del objetivo. Planos: <b>PP</b> ≤0,7 m · <b>PM</b> ≤1,3 · <b>PA</b> ≤1,9 · <b>PE</b> ≤3 · <b>PG</b> >3.`,
     valid_k_shot:"ENCUADRES CORRECTOS", invalid_k_shot:"REVISA LOS ENCUADRES",
     valid_h_shot:"Pauta cumplida ✓", invalid_h_shot:"Hay planos que no cuadran",
+    axis_lbl:"EJE DE ACCIÓN",
+    hint_axis:`↔️ <b>Eje de acción</b> (línea ámbar): todas las cámaras del mismo lado que el plano general. Si una lo cruza, en el corte los personajes cambian de lado. Y ninguna cámara debe aparecer en el encuadre de otra.`,
+    m_axis:(n,mst)=>`${n}: salto de eje. Está al otro lado del eje de acción que marca ${mst}, así que en el corte los personajes cambian de lado. Pásala al mismo lado.`,
+    m_camin:(n,q)=>`${n}: ${q} aparece dentro de su encuadre. Sácala del cono o cierra el plano.`,
     m_shotout:(n,q)=>`${n}: fuera de cuadro — ${q}. Orienta la cámara o abre el ángulo.`,
     m_shottight:(n,q,fw,need)=>`${n}: ${q} no cabe en el encuadre — ${fw} m de campo para ${need} m de sujeto. Aléjate o abre el ángulo.`,
     m_shotsize:(n,q,da,fw)=>`${n}: la pauta pide un ${q} y estás dando un ${da} (${fw} m de campo). Cambia la óptica o la distancia.`,
@@ -243,6 +247,10 @@ const STR = {
     hint_shot:`🎥 <b>Framing</b>: no cabling here. Tap a camera to select it, <b>drag the handle</b> on its cone to aim it, and move it inside its area. The lens opens or closes the angle: the <b>field width</b> you see depends on distance and lens. Shots: <b>CU</b> ≤0.7 m · <b>MS</b> ≤1.3 · <b>MLS</b> ≤1.9 · <b>FS</b> ≤3 · <b>WS</b> >3.`,
     valid_k_shot:"FRAMING OK", invalid_k_shot:"CHECK THE FRAMING",
     valid_h_shot:"Shot list met ✓", invalid_h_shot:"Some shots don't match",
+    axis_lbl:"LINE OF ACTION",
+    hint_axis:`↔️ <b>Line of action</b> (amber line): every camera on the same side as the wide shot. Cross it and the subjects swap sides on the cut. And no camera may show up in another one's frame.`,
+    m_axis:(n,mst)=>`${n}: crossing the line. It sits on the far side of the line of action set by ${mst}, so on the cut the subjects swap sides. Move it to the same side.`,
+    m_camin:(n,q)=>`${n}: ${q} shows up inside its frame. Get it out of the cone or tighten the shot.`,
     m_shotout:(n,q)=>`${n}: out of frame — ${q}. Aim the camera or open the angle.`,
     m_shottight:(n,q,fw,need)=>`${n}: ${q} doesn't fit — ${fw} m of field for ${need} m of subject. Move back or open the angle.`,
     m_shotsize:(n,q,da,fw)=>`${n}: the shot list asks for a ${q} and you're giving a ${da} (${fw} m of field). Change lens or distance.`,
@@ -292,6 +300,10 @@ const STR = {
     hint_shot:`🎥 <b>Enkoadreak</b>: hemen ez da kableatzen. Ukitu kamera bat hautatzeko, <b>arrastatu bere konoaren heldulekua</b> orientatzeko, eta mugitu bere eremuaren barruan. Optikak angelua ireki edo ixten du: ikusten duzun <b>eremu-zabalera</b> distantziaren eta objektiboaren araberakoa da. Planoak: <b>PP</b> ≤0,7 m · <b>PM</b> ≤1,3 · <b>PA</b> ≤1,9 · <b>PE</b> ≤3 · <b>PG</b> >3.`,
     valid_k_shot:"ENKOADREAK ONDO", invalid_k_shot:"BERRIKUSI ENKOADREAK",
     valid_h_shot:"Pauta beteta ✓", invalid_h_shot:"Plano batzuk ez datoz bat",
+    axis_lbl:"EKINTZA-ARDATZA",
+    hint_axis:`↔️ <b>Ekintza-ardatza</b> (lerro anbarra): kamera guztiak plano orokorraren alde berean. Bat gurutzatzen bada, mozketan pertsonaiek aldez aldatzen dute. Eta kamerarik ez da beste baten enkoadrean agertu behar.`,
+    m_axis:(n,mst)=>`${n}: ardatz-jauzia. ${mst}(e)k markatzen duen ekintza-ardatzaren beste aldean dago, eta mozketan pertsonaiek aldez aldatzen dute. Pasa ezazu alde berera.`,
+    m_camin:(n,q)=>`${n}: ${q} bere enkoadrean agertzen da. Atera ezazu konotik edo itxi planoa.`,
     m_shotout:(n,q)=>`${n}: koadrotik kanpo — ${q}. Orientatu kamera edo zabaldu angelua.`,
     m_shottight:(n,q,fw,need)=>`${n}: ${q} ez da koadroan sartzen — ${fw} m eremu ${need} m-ko subjektuarentzat. Urrundu edo zabaldu angelua.`,
     m_shotsize:(n,q,da,fw)=>`${n}: pautak ${q} bat eskatzen du eta ${da} bat ematen ari zara (${fw} m eremu). Aldatu optika edo distantzia.`,
@@ -714,6 +726,43 @@ const SETTV_ENC = {
   budget: 0,
 };
 
+const SETTV_ENC2 = {
+  nombre:  { es:"Set de TV · Eje de acción", en:"TV Set · Line of action", eu:"TB Platoa · Ekintza-ardatza" },
+  encargo: { es:"Entrevista en dos sillones enfrentados. Además de cumplir la pauta, respeta el EJE DE ACCIÓN: la línea que une a los dos personajes (marcada en el plano). La cámara del plano general fija el lado bueno; si otra se pasa al otro lado, en el corte los personajes cambian de sitio y el espectador se pierde. Y cuidado con que una cámara no se cuele en el encuadre de otra.",
+             en:"Interview on two facing armchairs. On top of meeting the shot list, respect the LINE OF ACTION: the line joining the two subjects (drawn on the plan). The wide-shot camera sets the good side; if another one crosses over, on the cut the subjects swap sides and the viewer gets lost. And watch out for a camera showing up inside another's frame.",
+             eu:"Elkarrizketa aurrez aurreko bi besaulkitan. Pauta betetzeaz gain, errespetatu EKINTZA-ARDATZA: bi pertsonaiak lotzen dituen lerroa (planoan markatuta). Plano orokorreko kamerak alde ona finkatzen du; beste bat beste aldera pasatzen bada, mozketan pertsonaiek lekuz aldatzen dute eta ikuslea galdu egiten da. Eta kontuz kamera bat beste baten enkoadrean sar ez dadin." },
+  shot: true, freeCams: true,
+  planoM:  { w:26, h:18 },
+  escalaPxM: 42,
+  zones: [
+    { shape:"rect",   kind:"stage",   x:13,   y:2.6, w:18,  h:3.6, label:"DECORADO / SET" },
+    { shape:"rect",   kind:"seating", x:12.9, y:7.3, w:1.6, h:1.6, label:"MESA PLATÓ" },
+    { shape:"circle", kind:"decor",   x:20,   y:5,   r:0.6, label:"FOCO" },
+  ],
+  subjects: [
+    { id:"P", label:"PRESENTADORA", x:11.5, y:6.2, size:0.5 },
+    { id:"I", label:"INVITADO",     x:14.2, y:8.4, size:0.5 },
+  ],
+  axis: { a:"P", b:"I" }, axisLen: 8,               // eje de acción entre los dos personajes
+  lenses: {
+    wide:   { nombre:"Gran angular", fov:62 },
+    normal: { nombre:"Normal",       fov:33 },
+    tele:   { nombre:"Tele",         fov:14 },
+    tele_l: { nombre:"Tele largo",   fov:7  },
+  },
+  cams: [
+    { id:"CAM 1", x:14.5, y:13.5, ang:-100, lens:"normal", area:{x:14.5, y:13.5, w:5, h:3} },   // plano maestro: fija el eje
+    { id:"CAM 2", x:9,    y:12,   ang:-70,  lens:"normal", area:{x:9.5,  y:11.5, w:5, h:5} },
+    { id:"CAM 3", x:18.5, y:11.5, ang:-140, lens:"normal", area:{x:18,   y:11.5, w:5, h:5} },   // ojo: su área cruza el eje
+  ],
+  plan: [
+    { cam:0, subj:["P","I"], size:"PG" },
+    { cam:1, subj:"P",       size:"PM" },
+    { cam:2, subj:"I",       size:"PM" },
+  ],
+  budget: 0,
+};
+
 const GAME = {
   teatro:    { sub:{ es:"Empiezas con SDI y HDMI en un teatro pequeño. Al subir de nivel el recinto crece: aparece la fibra (SDI no llega) y luego los formatos mixtos (IP).",
                      en:"Start with SDI and HDMI in a small theatre. As levels go up the venue grows: fibre appears (SDI won't reach) and then mixed formats (IP).",
@@ -723,7 +772,7 @@ const GAME = {
                      eu:"Distantzia luzeak (zuntza), jende ugari zutik, PA dorreak. Oholtza ezkerrean." }, niveles:[ CONCIERTO_N1, CONCIERTO_N2, CONCIERTO_N3 ] },
   setTV:     { sub:{ es:"Decorado y mesa arriba, cámaras abajo apuntando al set. Control en sala aparte (patch de pared).",
                      en:"Set and desk at the top, cameras below aiming at the set. Gallery in a separate room (wall patch).",
-                     eu:"Dekoratua eta mahaia goian, kamerak behean set-era begira. Kontrola beste gela batean (hormako patcha)." }, niveles:[ SETTV_N1, SETTV_N2, SETTV_N3, SETTV_ENC ] },
+                     eu:"Dekoratua eta mahaia goian, kamerak behean set-era begira. Kontrola beste gela batean (hormako patcha)." }, niveles:[ SETTV_N1, SETTV_N2, SETTV_N3, SETTV_ENC, SETTV_ENC2 ] },
 };
 
 /* ============================================================
@@ -865,7 +914,7 @@ function drawStatic(){
   const sl=el("text",{x:bx+m(10),y:by-8,fill:css("--dim"),"font-size":11,"text-anchor":"middle"},gStatic);
   sl.textContent="20 m";
 
-  if(LEVEL.shot){ drawCams(); drawSubjects(); return; }   // el modo encuadre no tiene mesa ni entradas
+  if(LEVEL.shot){ drawAxis(); drawCams(); drawSubjects(); return; }   // el modo encuadre no tiene mesa ni entradas
 
   // mesa / cabina (faces "top"=entradas arriba; "left"=entradas a la izquierda, mirando a la sala)
   const faces=LEVEL.mesa.faces||"top", nin=nInputs();
@@ -882,6 +931,16 @@ function drawStatic(){
   });
 
   drawCams();
+}
+
+function drawAxis(){
+  const ax=axisPts(); if(!ax) return;
+  const dx=ax.b.x-ax.a.x, dy=ax.b.y-ax.a.y, L=Math.hypot(dx,dy)||1, E=(LEVEL.axisLen||9)/L;
+  const p1={x:ax.a.x-dx*E, y:ax.a.y-dy*E}, p2={x:ax.b.x+dx*E, y:ax.b.y+dy*E};
+  el("line",{x1:m(p1.x),y1:m(p1.y),x2:m(p2.x),y2:m(p2.y),stroke:css("--amber"),"stroke-width":1.2,"stroke-dasharray":"9 6",opacity:.55},gStatic);
+  const up=(p1.y<p2.y)?p1:p2;                      // rotula el extremo más alto, que suele quedar libre
+  const t=el("text",{x:m(up.x),y:m(up.y)-6,fill:css("--amber"),"font-size":9,"letter-spacing":"1.5","text-anchor":"middle",opacity:.8},gStatic);
+  t.textContent=tr('axis_lbl');
 }
 
 function drawSubjects(){
@@ -932,7 +991,7 @@ function drawCams(){
       const tgt=(LEVEL.plan||[]).find(pl=>pl.cam===i);
       const fr=tgt?framing(i,tgt.subj):null;
       if(fr){
-        const a=rad(c.ang), px=c.x+Math.cos(a)*1.8, py=c.y+Math.sin(a)*1.8;
+        const a=rad(c.ang-90), px=c.x+Math.cos(a)*1.5, py=c.y+Math.sin(a)*1.5;   // al costado de la cámara: no tapa al sujeto
         const txt=(fr.out.length?tr('shot_none'):fr.talla+" · "+fr.fw.toFixed(1)+" m");
         const w=(fr.out.length?86:104);
         el("rect",{x:m(px)-w/2,y:m(py)-11,width:w,height:19,rx:4,fill:css("--bg"),stroke:fr.out.length?css("--dim"):css("--cyan"),"stroke-width":1,opacity:.92,"pointer-events":"none"},gStatic);
@@ -980,6 +1039,28 @@ const inFrame=(c,p)=>Math.abs(angDiff(angTo(c,p),c.ang))<=camFov(c)/2;
 const frameWidth=(c,d)=>2*d*Math.tan(rad(camFov(c))/2);              // ancho de campo a esa distancia
 function shotSize(w){ for(const s of SHOT_SIZES) if(w<=s.max) return s.k; return "PG"; }
 function subjOf(id){ return (LEVEL.subjects||[]).find(s=>s.id===id); }
+
+// ---- eje de acción (regla de los 180°) ----
+function axisPts(){                                // los dos extremos del eje: dos sujetos, o dos puntos sueltos
+  const ax=LEVEL.axis; if(!ax) return null;
+  const a=ax.a?subjOf(ax.a):ax.from, b=ax.b?subjOf(ax.b):ax.to;
+  return (a&&b)?{a,b}:null;
+}
+function axisSide(p){                              // a qué lado del eje cae un punto (signo del producto cruzado)
+  const ax=axisPts(); if(!ax) return 0;
+  const v=(ax.b.x-ax.a.x)*(p.y-ax.a.y)-(ax.b.y-ax.a.y)*(p.x-ax.a.x);
+  return Math.abs(v)<1e-6?0:Math.sign(v);
+}
+function axisMaster(){                             // la cámara que fija el lado bueno: el plano maestro
+  if(LEVEL.axisMaster!==undefined) return LEVEL.axisMaster;
+  const pl=(LEVEL.plan||[])[0];
+  return pl?pl.cam:0;
+}
+// ---- una cámara dentro del cuadro de otra ----
+function camsInShot(ci){                           // qué cámaras se cuelan en el encuadre de esta
+  const c=cams[ci];
+  return cams.map((o,k)=>({o,k})).filter(({o,k})=>k!==ci && inFrame(c,o) && dist(c,o)<=(LEVEL.shotRange||14));
+}
 
 // lo que da una cámara sobre un sujeto (o un grupo de sujetos)
 function framing(ci, ids){
@@ -1344,6 +1425,19 @@ function validateShot(){                            // modo encuadre: se comprue
     }
     if(fr.talla!==pl.size) problemas.push(tr('m_shotsize')(c.id, pl.size, fr.talla, fr.fw.toFixed(1)));
   });
+  if(axisPts()){                                    // regla de los 180°: todas al mismo lado del eje
+    const mi=axisMaster(), ref=axisSide(cams[mi]);
+    cams.forEach((c,ci)=>{
+      if(ci===mi||!(LEVEL.plan||[]).some(pl=>pl.cam===ci))return;
+      const s2=axisSide(c);
+      if(s2!==0 && ref!==0 && s2!==ref) problemas.push(tr('m_axis')(c.id, cams[mi].id));
+    });
+  }
+  (LEVEL.plan||[]).forEach(pl=>{                    // cámaras que se cuelan en el cuadro de otra
+    const c=cams[pl.cam]; if(!c)return;
+    const intr=camsInShot(pl.cam);
+    if(intr.length) problemas.push(tr('m_camin')(c.id, intr.map(x=>x.o.id).join(", ")));
+  });
   return problemas;
 }
 function validate(){
@@ -1567,7 +1661,7 @@ function updateHint(){                          // cada aviso solo sale si el ni
   const hasExit=((LEVEL&&LEVEL.zones)||[]).some(z=>zoneBlock(z)==="forbid");
   const hasRF=(LEVEL?cams:[]).some(c=>c.wireless);
   const tol=(LEVEL&&LEVEL.syncTolMs!==undefined)?LEVEL.syncTolMs:SYNC_TOL_MS;
-  if(LEVEL&&LEVEL.shot){ document.getElementById("hint").innerHTML=tr("hint_shot"); return; }
+  if(LEVEL&&LEVEL.shot){ document.getElementById("hint").innerHTML=tr("hint_shot")+(axisPts()?" "+tr("hint_axis"):""); return; }
   document.getElementById("hint").innerHTML=tr("hint")+(hasRF?" "+tr("hint_rf"):"")+(hasExit?" "+tr("hint_exit"):"")+((LEVEL&&LEVEL.sync)?" "+tr("hint_sync")(tol,(LEVEL.fps||25)):"");
 }
 function applyLang(){
