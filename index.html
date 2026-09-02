@@ -118,6 +118,11 @@
       <div class="inv" id="convs"></div>
     </div>
 
+    <div class="block" id="lensBlock">
+      <h2 data-i18n="inv_lens">Inventario · óptica</h2>
+      <div class="inv" id="lenses"></div>
+    </div>
+
     <div class="block" id="planBlock">
       <h2 data-i18n="plan_title">Pauta de realización</h2>
       <div id="plan"></div>
@@ -191,9 +196,11 @@ const STR = {
     fs_name:"Frame sync (mesa)", meta_fs:"€ · alinea todas las entradas", lat_synced:"sincronizado",
     inv_lens:"Inventario · óptica", meta_lens:"de campo horizontal", plan_title:"Pauta de realización",
     shot_none:"sin sujeto en cuadro",
-    hint_shot:`🎥 <b>Encuadres</b>: aquí no se cablea. Toca una cámara para seleccionarla, <b>arrastra el tirador</b> de su cono para orientarla y muévela dentro de su área. La óptica abre o cierra el ángulo: el <b>ancho de campo</b> que ves depende de la distancia y del objetivo. Planos: <b>PP</b> ≤0,7 m · <b>PM</b> ≤1,3 · <b>PA</b> ≤1,9 · <b>PE</b> ≤3 · <b>PG</b> >3.`,
+    hint_shot:`🎥 <b>Encuadres</b>: toca una cámara para seleccionarla, <b>arrastra el tirador</b> de su cono para orientarla y muévela dentro de su área. La óptica abre o cierra el ángulo: el <b>ancho de campo</b> que ves depende de la distancia y del objetivo. Planos: <b>PP</b> ≤0,7 m · <b>PM</b> ≤1,3 · <b>PA</b> ≤1,9 · <b>PE</b> ≤3 · <b>PG</b> >3.`,
     valid_k_shot:"ENCUADRES CORRECTOS", invalid_k_shot:"REVISA LOS ENCUADRES",
     valid_h_shot:"Pauta cumplida ✓", invalid_h_shot:"Hay planos que no cuadran",
+    valid_k_mix:"PLATÓ RESUELTO", invalid_k_mix:"REVISA EL PLATÓ",
+    valid_h_mix:"Encuadres y señal ✓", invalid_h_mix:"Hay fallos de encuadre o de señal",
     axis_lbl:"EJE DE ACCIÓN",
     hint_axis:`↔️ <b>Eje de acción</b> (línea ámbar): todas las cámaras del mismo lado que el plano general. Si una lo cruza, en el corte los personajes cambian de lado. Y ninguna cámara debe aparecer en el encuadre de otra.`,
     m_axis:(n,mst)=>`${n}: salto de eje. Está al otro lado del eje de acción que marca ${mst}, así que en el corte los personajes cambian de lado. Pásala al mismo lado.`,
@@ -244,9 +251,11 @@ const STR = {
     fs_name:"Frame sync (desk)", meta_fs:"€ · aligns every input", lat_synced:"in sync",
     inv_lens:"Inventory · lens", meta_lens:"horizontal field", plan_title:"Shot list",
     shot_none:"no subject in frame",
-    hint_shot:`🎥 <b>Framing</b>: no cabling here. Tap a camera to select it, <b>drag the handle</b> on its cone to aim it, and move it inside its area. The lens opens or closes the angle: the <b>field width</b> you see depends on distance and lens. Shots: <b>CU</b> ≤0.7 m · <b>MS</b> ≤1.3 · <b>MLS</b> ≤1.9 · <b>FS</b> ≤3 · <b>WS</b> >3.`,
+    hint_shot:`🎥 <b>Framing</b>: tap a camera to select it, <b>drag the handle</b> on its cone to aim it, and move it inside its area. The lens opens or closes the angle: the <b>field width</b> you see depends on distance and lens. Shots: <b>CU</b> ≤0.7 m · <b>MS</b> ≤1.3 · <b>MLS</b> ≤1.9 · <b>FS</b> ≤3 · <b>WS</b> >3.`,
     valid_k_shot:"FRAMING OK", invalid_k_shot:"CHECK THE FRAMING",
     valid_h_shot:"Shot list met ✓", invalid_h_shot:"Some shots don't match",
+    valid_k_mix:"STUDIO SOLVED", invalid_k_mix:"CHECK THE STUDIO",
+    valid_h_mix:"Framing and signal ✓", invalid_h_mix:"Framing or signal issues",
     axis_lbl:"LINE OF ACTION",
     hint_axis:`↔️ <b>Line of action</b> (amber line): every camera on the same side as the wide shot. Cross it and the subjects swap sides on the cut. And no camera may show up in another one's frame.`,
     m_axis:(n,mst)=>`${n}: crossing the line. It sits on the far side of the line of action set by ${mst}, so on the cut the subjects swap sides. Move it to the same side.`,
@@ -297,9 +306,11 @@ const STR = {
     fs_name:"Frame sync (mahaia)", meta_fs:"€ · sarrera guztiak lerrokatzen ditu", lat_synced:"sinkronizatuta",
     inv_lens:"Inbentarioa · optika", meta_lens:"eremu horizontala", plan_title:"Errealizazio-pauta",
     shot_none:"ez dago subjekturik koadroan",
-    hint_shot:`🎥 <b>Enkoadreak</b>: hemen ez da kableatzen. Ukitu kamera bat hautatzeko, <b>arrastatu bere konoaren heldulekua</b> orientatzeko, eta mugitu bere eremuaren barruan. Optikak angelua ireki edo ixten du: ikusten duzun <b>eremu-zabalera</b> distantziaren eta objektiboaren araberakoa da. Planoak: <b>PP</b> ≤0,7 m · <b>PM</b> ≤1,3 · <b>PA</b> ≤1,9 · <b>PE</b> ≤3 · <b>PG</b> >3.`,
+    hint_shot:`🎥 <b>Enkoadreak</b>: ukitu kamera bat hautatzeko, <b>arrastatu bere konoaren heldulekua</b> orientatzeko, eta mugitu bere eremuaren barruan. Optikak angelua ireki edo ixten du: ikusten duzun <b>eremu-zabalera</b> distantziaren eta objektiboaren araberakoa da. Planoak: <b>PP</b> ≤0,7 m · <b>PM</b> ≤1,3 · <b>PA</b> ≤1,9 · <b>PE</b> ≤3 · <b>PG</b> >3.`,
     valid_k_shot:"ENKOADREAK ONDO", invalid_k_shot:"BERRIKUSI ENKOADREAK",
     valid_h_shot:"Pauta beteta ✓", invalid_h_shot:"Plano batzuk ez datoz bat",
+    valid_k_mix:"PLATOA EBATZITA", invalid_k_mix:"BERRIKUSI PLATOA",
+    valid_h_mix:"Enkoadreak eta seinalea ✓", invalid_h_mix:"Enkoadre- edo seinale-akatsak daude",
     axis_lbl:"EKINTZA-ARDATZA",
     hint_axis:`↔️ <b>Ekintza-ardatza</b> (lerro anbarra): kamera guztiak plano orokorraren alde berean. Bat gurutzatzen bada, mozketan pertsonaiek aldez aldatzen dute. Eta kamerarik ez da beste baten enkoadrean agertu behar.`,
     m_axis:(n,mst)=>`${n}: ardatz-jauzia. ${mst}(e)k markatzen duen ekintza-ardatzaren beste aldean dago, eta mozketan pertsonaiek aldez aldatzen dute. Pasa ezazu alde berera.`,
@@ -763,6 +774,53 @@ const SETTV_ENC2 = {
   budget: 0,
 };
 
+const SETTV_MIX = {
+  nombre:  { es:"Set de TV · Plató completo", en:"TV Set · Full studio", eu:"TB Platoa · Plato osoa" },
+  encargo: { es:"Las dos mitades del oficio a la vez: primero ENCUADRA (pauta, eje de acción y que ninguna cámara salga en el plano de otra) y después CABLEA hasta el control, con sus formatos y su presupuesto. Ojo: donde colocas la cámara para que el plano quede bien decide también cuánto cable necesitas. Las dos mirrorless salen por HDMI (≤15 m): no llegan al control sin conversor.",
+             en:"Both halves of the job at once: first FRAME (shot list, line of action, and no camera showing up in another's shot) and then CABLE it to the gallery, formats and budget included. Careful: where you put a camera to get the shot right also decides how much cable you need. The two mirrorless cameras output HDMI (≤15 m): they won't reach the gallery without a converter.",
+             eu:"Lanbidearen bi erdiak batera: lehenik ENKOADRATU (pauta, ekintza-ardatza eta kamerarik ez dadila beste baten planoan atera) eta gero KABLEATU kontrolera, formatuekin eta aurrekontuarekin. Kontuz: kamera non jartzen duzun planoa ondo ateratzeko, horrek erabakitzen du zenbat kable behar duzun. Bi mirrorlessek HDMI bidez ateratzen dute (≤15 m): ez dira kontrolera iristen bihurgailurik gabe." },
+  shot: true, freeCams: true,
+  planoM:  { w:30, h:20 },
+  escalaPxM: 34,
+  mesa: { x:27, y:10, inputs:["sdi","sdi","sdi"], faces:"left", label:"CONTROL", w:4.5, h:8, gap:2.4 },
+  zones: [
+    { shape:"rect",   kind:"stage",   x:12,   y:2.6, w:16,  h:3.6, label:"DECORADO / SET" },
+    { shape:"rect",   kind:"seating", x:12.3, y:7,   w:1.6, h:1.6, label:"MESA PLATÓ" },
+    { shape:"circle", kind:"decor",   x:19,   y:5,   r:0.6, label:"FOCO" },
+  ],
+  subjects: [
+    { id:"P", label:"PRESENTADORA", x:11,   y:6,   size:0.5 },
+    { id:"I", label:"INVITADO",     x:13.6, y:8,   size:0.5 },
+  ],
+  axis: { a:"P", b:"I" }, axisLen: 7,
+  lenses: {
+    wide:   { nombre:"Gran angular", fov:62 },
+    normal: { nombre:"Normal",       fov:33 },
+    tele:   { nombre:"Tele",         fov:14 },
+    tele_l: { nombre:"Tele largo",   fov:7  },
+  },
+  cams: [
+    { id:"CAM 1", x:12.5, y:15, ang:-95,  lens:"normal", out:"sdi",  area:{x:12.5, y:15, w:5, h:3} },
+    { id:"CAM 2", x:7,    y:13, ang:-60,  lens:"normal", out:"hdmi", area:{x:7,    y:13, w:4, h:4} },
+    { id:"CAM 3", x:18,   y:13, ang:-130, lens:"normal", out:"hdmi", area:{x:18,   y:13, w:4, h:4} },
+  ],
+  plan: [
+    { cam:0, subj:["P","I"], size:"PG" },
+    { cam:1, subj:"P",       size:"PM" },
+    { cam:2, subj:"I",       size:"PM" },
+  ],
+  cableTypes: {
+    hdmi: { nombre:"HDMI",   signal:"hdmi", limite:15,  eurM:1.5, conv:0, color:"--amber" },
+    sdi:  { nombre:"HD-SDI", signal:"sdi",  limite:100, eurM:3,   conv:0, color:"--cyan"  },
+  },
+  converters: {
+    hdmi_sdi: { nombre:"HDMI→SDI", tag:"H→S", from:"hdmi", to:"sdi",  eur:180 },
+    sdi_hdmi: { nombre:"SDI→HDMI", tag:"S→H", from:"sdi",  to:"hdmi", eur:150 },
+  },
+  convEur: 250,
+  budget: 700,
+};
+
 const GAME = {
   teatro:    { sub:{ es:"Empiezas con SDI y HDMI en un teatro pequeño. Al subir de nivel el recinto crece: aparece la fibra (SDI no llega) y luego los formatos mixtos (IP).",
                      en:"Start with SDI and HDMI in a small theatre. As levels go up the venue grows: fibre appears (SDI won't reach) and then mixed formats (IP).",
@@ -772,7 +830,7 @@ const GAME = {
                      eu:"Distantzia luzeak (zuntza), jende ugari zutik, PA dorreak. Oholtza ezkerrean." }, niveles:[ CONCIERTO_N1, CONCIERTO_N2, CONCIERTO_N3 ] },
   setTV:     { sub:{ es:"Decorado y mesa arriba, cámaras abajo apuntando al set. Control en sala aparte (patch de pared).",
                      en:"Set and desk at the top, cameras below aiming at the set. Gallery in a separate room (wall patch).",
-                     eu:"Dekoratua eta mahaia goian, kamerak behean set-era begira. Kontrola beste gela batean (hormako patcha)." }, niveles:[ SETTV_N1, SETTV_N2, SETTV_N3, SETTV_ENC, SETTV_ENC2 ] },
+                     eu:"Dekoratua eta mahaia goian, kamerak behean set-era begira. Kontrola beste gela batean (hormako patcha)." }, niveles:[ SETTV_N1, SETTV_N2, SETTV_N3, SETTV_ENC, SETTV_ENC2, SETTV_MIX ] },
 };
 
 /* ============================================================
@@ -790,6 +848,12 @@ const m=v=>v*S;                                   // metros → px de dibujo (le
 let cables=[], camConv=[], inConv=[], ramps=[], rx={}, camDec=[];   // rx[ci]={x,y}=receptor inalámbrico; camDec[ci]=true si hay Decimator
 let curType=null, curConv=null, mode="cable", locked=false, frameSync=false, selCam=0;
 const ctOf=ci=>LEVEL.cableTypes[cables[ci].type];
+const hasCable=()=>!!(LEVEL&&LEVEL.cableTypes&&LEVEL.mesa);   // ¿este nivel se cablea?
+const mesaFaces=()=>LEVEL.mesa.faces||"top";
+const mesaW=()=>LEVEL.mesa.w||(mesaFaces()==="left"?16:26);   // en metros; los platós pequeños la declaran
+const mesaH=()=>LEVEL.mesa.h||(mesaFaces()==="left"?(nInputs()*mesaGap()+6):10);
+const mesaGap=()=>LEVEL.mesa.gap||6;                          // separación entre entradas
+const portOff=()=>LEVEL.shot?0.9:3;                           // el conector, pegado a la cámara si el plano es de plató
 
 /* ============================================================
    GEOMETRÍA
@@ -914,11 +978,12 @@ function drawStatic(){
   const sl=el("text",{x:bx+m(10),y:by-8,fill:css("--dim"),"font-size":11,"text-anchor":"middle"},gStatic);
   sl.textContent="20 m";
 
-  if(LEVEL.shot){ drawAxis(); drawCams(); drawSubjects(); return; }   // el modo encuadre no tiene mesa ni entradas
+  if(LEVEL.shot) drawAxis();
+  if(!hasCable()){ drawCams(); drawSubjects(); return; }   // encuadre puro: sin mesa ni entradas
 
   // mesa / cabina (faces "top"=entradas arriba; "left"=entradas a la izquierda, mirando a la sala)
-  const faces=LEVEL.mesa.faces||"top", nin=nInputs();
-  const mw = faces==="left"?16:26, mh = faces==="left"?(nin*6+6):10;
+  const faces=mesaFaces();
+  const mw = mesaW(), mh = mesaH();
   el("rect",{x:m(LEVEL.mesa.x-mw/2),y:m(LEVEL.mesa.y-mh/2),width:m(mw),height:m(mh),fill:css("--panel"),stroke:css("--line"),"stroke-width":1.5,rx:3},gStatic);
   const ml=el("text",{x:m(LEVEL.mesa.x+(faces==="left"?2:0)),y:m(LEVEL.mesa.y)+3,fill:css("--dim"),"font-size":8,"letter-spacing":"1","text-anchor":"middle"},gStatic);
   ml.textContent=tl(LEVEL.mesa.label||"CABINA");
@@ -931,6 +996,7 @@ function drawStatic(){
   });
 
   drawCams();
+  if(LEVEL.shot) drawSubjects();
 }
 
 function drawAxis(){
@@ -986,7 +1052,7 @@ function drawCams(){
     if(LEVEL.shot){
       const lb=el("text",{x:m(c.x),y:m(c.y)+m(1.4),fill:sel?css("--amber"):css("--txt"),"font-size":11,"letter-spacing":"0.5","text-anchor":"middle"},gStatic);
       const L=(LEVEL.lenses||{})[c.lens];
-      lb.textContent=c.id+" · "+(L?tl(L.nombre):camFov(c)+"°");
+      lb.textContent=c.id+" · "+(L?tl(L.nombre):camFov(c)+"°")+(hasCable()?" · "+String(c.out||"").toUpperCase():"");
       // lo que da la cámara ahora mismo: tamaño de plano y ancho de campo sobre lo que tenga delante
       const tgt=(LEVEL.plan||[]).find(pl=>pl.cam===i);
       const fr=tgt?framing(i,tgt.subj):null;
@@ -1010,7 +1076,7 @@ function drawCams(){
       const lb=el("text",{x:m(c.x),y:ly,fill:css("--txt"),"font-size":11,"letter-spacing":"0.5","text-anchor":"middle"},gStatic);
       lb.textContent=c.id+(c.wireless?" · RF→"+c.rxFmt.toUpperCase():" · "+c.out.toUpperCase())+(c.res==="4k"?" 4K":"");
     }
-    if(LEVEL.shot){ /* sin cableado */ }
+    if(!hasCable()){ /* nivel sin cableado */ }
     else if(c.wireless){
       const tx=el("text",{x:m(c.x),y:m(c.y)+m(4),fill:css("--amber"),"font-size":8,"letter-spacing":"1","text-anchor":"middle"},gStatic); tx.textContent="TX";
     }else{
@@ -1317,7 +1383,7 @@ svg.addEventListener("pointermove",e=>{
     let nx=p.x/S, ny=p.y/S;
     if(a){ nx=Math.max(a.x-a.w/2,Math.min(a.x+a.w/2,nx)); ny=Math.max(a.y-a.h/2,Math.min(a.y+a.h/2,ny)); }
     else { nx=Math.max(2,Math.min(P.w-2,nx)); ny=Math.max(2,Math.min(P.h-2,ny)); }
-    if(!inHardZone(nx,ny)){ c.x=nx; c.y=ny; c.port={x:nx+3,y:ny}; drawStatic(); redrawCables(); updateHUD(); } }
+    if(!inHardZone(nx,ny)){ c.x=nx; c.y=ny; c.port={x:nx+portOff(),y:ny}; drawStatic(); redrawCables(); updateHUD(); } }
   else{ if(Math.hypot(e.clientX-drag.sx,e.clientY-drag.sy)>6)drag.moved=true; const p=toSvg(e); cables[drag.ci].wps[drag.wp]={x:p.x/S,y:p.y/S}; redrawCables(); updateHUD(); }
 });
 
@@ -1386,13 +1452,14 @@ function totals(){
   });
   camConv.forEach(k=>{if(k){convs++;cost+=LEVEL.converters[k].eur;}});
   inConv.forEach(k=>{if(k){convs++;cost+=LEVEL.converters[k].eur;}});
-  cost+=ramps.length*LEVEL.rampEur;
+  cost+=ramps.length*(LEVEL.rampEur||0);
   cams.forEach((c,ci)=>{ if(c.wireless && rx[ci]) cost+=c.txEur; });   // par TX+RX de cada inalámbrica colocada
   camDec.forEach(d=>{ if(d) cost+=(LEVEL.decEur||250); });             // Decimator por cámara
   if(LEVEL.sync&&frameSync) cost+=(LEVEL.fsEur||0);                    // frame sync de mesa (compra única)
   return {conn,total,convs,cost,allOk,within:cost<=LEVEL.budget,ramps:ramps.length};
 }
 function updateHUD(){
+  if(!hasCable())return;
   const t=totals();
   document.getElementById("s-conn").textContent=`${t.conn} / ${cams.length}`;
   document.getElementById("s-total").textContent=`${t.total.toFixed(0)} m`;
@@ -1441,8 +1508,8 @@ function validateShot(){                            // modo encuadre: se comprue
   return problemas;
 }
 function validate(){
-  if(LEVEL.shot) return finishValidate(validateShot());
-  const problemas=[];
+  const problemas=LEVEL.shot?validateShot():[];
+  if(!hasCable()) return finishValidate(problemas);
   cams.forEach((cam,ci)=>{
     const name=cam.id, c=cables[ci];
     if(cam.wireless){                                   // cámara inalámbrica: RX colocado y en alcance
@@ -1480,16 +1547,18 @@ function validate(){
   return finishValidate(problemas);
 }
 function finishValidate(problemas){
-  const t=LEVEL.shot?{cost:0,total:0,convs:0}:totals();
+  const t=hasCable()?totals():{cost:0,total:0,convs:0};
 
   locked=true; drawStatic(); redrawCables();
   const ok=problemas.length===0;
-  const k=document.getElementById("win-k"), sh=LEVEL.shot;
-  k.textContent=ok?tr(sh?'valid_k_shot':'valid_k'):tr(sh?'invalid_k_shot':'invalid_k');
+  const mix=LEVEL.shot&&hasCable(), sh=LEVEL.shot&&!hasCable();
+  const suf=mix?"_mix":(sh?"_shot":"");
+  const k=document.getElementById("win-k");
+  k.textContent=ok?tr('valid_k'+suf):tr('invalid_k'+suf);
   k.style.color=ok?css("--cyan"):css("--red");
-  document.getElementById("win-h").textContent=ok?tr(sh?'valid_h_shot':'valid_h'):tr(sh?'invalid_h_shot':'invalid_h');
+  document.getElementById("win-h").textContent=ok?tr('valid_h'+suf):tr('invalid_h'+suf);
   const res=document.getElementById("win-res");
-  if(ok&&LEVEL.shot){
+  if(ok&&LEVEL.shot&&!hasCable()){
     res.innerHTML=`<div class="good">${tr('w_shotok')(cams.length)}</div>`;
   }else if(ok){
     const sobra=LEVEL.budget-t.cost;
@@ -1507,18 +1576,19 @@ function finishValidate(problemas){
    ============================================================ */
 function buildInv(){
   const cablesBox=document.getElementById("inv"); cablesBox.innerHTML="";
-  const planBox=document.getElementById("plan");
+  const lensBox=document.getElementById("lenses"); lensBox.innerHTML="";
+  const planBox=document.getElementById("plan"); planBox.innerHTML="";
   document.getElementById("planBlock").style.display=LEVEL.shot?"":"none";
-  document.querySelector('[data-i18n="inv_cable"]').textContent=LEVEL.shot?tr('inv_lens'):tr('inv_cable');
-  if(LEVEL.shot){                                        // inventario de ópticas + pauta
+  document.getElementById("lensBlock").style.display=LEVEL.shot?"":"none";
+  document.querySelector('#inv').parentElement.style.display=hasCable()?"":"none";
+  if(LEVEL.shot){                                        // inventario de ópticas + pauta de realización
     Object.entries(LEVEL.lenses||{}).forEach(([key,L])=>{
       const b=document.createElement("button");
       b.className="invbtn"; b.dataset.kind="lens"; b.dataset.key=key;
       b.innerHTML=`<span><span class="nm">${tl(L.nombre)}</span><span class="meta">${L.fov}° ${tr('meta_lens')}</span></span><span class="dot" style="background:var(--cyan)"></span>`;
       b.addEventListener("click",()=>{ cams[selCam].lens=key; drawStatic(); refreshInv(); });
-      cablesBox.appendChild(b);
+      lensBox.appendChild(b);
     });
-    planBox.innerHTML="";
     (LEVEL.plan||[]).forEach(pl=>{
       const subj=(Array.isArray(pl.subj)?pl.subj:[pl.subj]).map(id=>{const sb=subjOf(id);return sb?tl(sb.label||id):id;}).join(" + ");
       const row=document.createElement("div");
@@ -1527,6 +1597,8 @@ function buildInv(){
       row.addEventListener("click",()=>{ selCam=pl.cam; drawStatic(); refreshInv(); });
       planBox.appendChild(row);
     });
+  }
+  if(!hasCable()){                                       // nivel de encuadre puro: nada de cableado
     document.getElementById("convs").innerHTML=""; document.getElementById("elems").innerHTML="";
     document.getElementById("convBlock").style.display="none";
     document.getElementById("elemBlock").style.display="none";
@@ -1540,7 +1612,6 @@ function buildInv(){
     b.addEventListener("click",()=>{mode="cable";curType=key;refreshInv();});
     cablesBox.appendChild(b);
   });
-  document.getElementById("plan").innerHTML="";
   const convBox=document.getElementById("convs"); convBox.innerHTML="";
   Object.entries(LEVEL.converters).forEach(([key,cv])=>{
     const b=document.createElement("button");
@@ -1590,8 +1661,8 @@ function buildInv(){
 function refreshInv(){
   if(LEVEL&&LEVEL.shot){
     const c=cams[selCam];
-    document.querySelectorAll(".invbtn").forEach(b=>{
-      const on=(b.dataset.kind==="lens"&&c&&b.dataset.key===c.lens);
+    document.querySelectorAll('#lenses .invbtn').forEach(b=>{
+      const on=(c&&b.dataset.key===c.lens);
       b.classList.toggle("on",on);
       b.style.color=on?css("--cyan"):""; b.style.borderColor=on?css("--cyan"):"";
     });
@@ -1599,9 +1670,9 @@ function refreshInv(){
       const pl=(LEVEL.plan||[])[i];
       r.style.opacity=(pl&&pl.cam===selCam)?"1":".55";
     });
-    return;
+    if(!hasCable()) return;
   }
-  document.querySelectorAll(".invbtn").forEach(b=>{
+  document.querySelectorAll("#inv .invbtn, #convs .invbtn, #elems .invbtn").forEach(b=>{
     const kind=b.dataset.kind, key=b.dataset.key;
     const on=(kind==="cable"&&mode==="cable"&&key===curType)||(kind==="conv"&&mode==="conv"&&key===curConv)||(kind==="ramp"&&mode==="ramp")||(kind==="rx"&&mode==="rx")||(kind==="dec"&&mode==="dec")||(kind==="fs"&&frameSync);
     const c=kind==="cable"?css(LEVEL.cableTypes[key].color):(kind==="dec"?css("--fiber"):(kind==="fs"?css("--eth"):((kind==="ramp"||kind==="rx")?css("--amber"):css("--txt"))));
@@ -1629,11 +1700,11 @@ function cargarNivel(vid,idx){
   S=LEVEL.escalaPxM;
   VBW=m(LEVEL.planoM.w); VBH=m(LEVEL.planoM.h);
   svg.setAttribute("viewBox",`0 0 ${VBW} ${VBH}`);
-  inputs=[]; if(!LEVEL.shot){ const n=nInputs(), faces=LEVEL.mesa.faces||"top";
+  inputs=[]; if(hasCable()){ const n=nInputs(), faces=mesaFaces(), g=mesaGap();
     for(let i=0;i<n;i++) inputs.push(faces==="left"
-      ? {x:LEVEL.mesa.x-8, y:LEVEL.mesa.y+(i-(n-1)/2)*6}
-      : {x:LEVEL.mesa.x+(i-(n-1)/2)*6, y:LEVEL.mesa.y-4}); }
-  cams=LEVEL.cams.map(c=>({...c, port:{x:c.x+3, y:c.y}}));   // salida por detrás de la cámara
+      ? {x:LEVEL.mesa.x-mesaW()/2, y:LEVEL.mesa.y+(i-(n-1)/2)*g}
+      : {x:LEVEL.mesa.x+(i-(n-1)/2)*g, y:LEVEL.mesa.y-mesaH()/2+1}); }
+  cams=LEVEL.cams.map(c=>({...c, port:{x:c.x+portOff(), y:c.y}}));   // salida por detrás de la cámara
   cables=new Array(cams.length).fill(null);
   camConv=new Array(cams.length).fill(null);
   inConv=new Array(inputs.length).fill(null);
@@ -1648,7 +1719,7 @@ function cargarNivel(vid,idx){
 }
 function reset(){
   if(!LEVEL)return;
-  cams=LEVEL.cams.map(c=>({...c, port:{x:c.x+3, y:c.y}}));   // vuelven a su posición/ángulo/óptica inicial
+  cams=LEVEL.cams.map(c=>({...c, port:{x:c.x+portOff(), y:c.y}}));   // vuelven a su posición/ángulo/óptica inicial
   cables=new Array(cams.length).fill(null);
   camConv=new Array(cams.length).fill(null);
   inConv=new Array(inputs.length).fill(null);
@@ -1661,8 +1732,9 @@ function updateHint(){                          // cada aviso solo sale si el ni
   const hasExit=((LEVEL&&LEVEL.zones)||[]).some(z=>zoneBlock(z)==="forbid");
   const hasRF=(LEVEL?cams:[]).some(c=>c.wireless);
   const tol=(LEVEL&&LEVEL.syncTolMs!==undefined)?LEVEL.syncTolMs:SYNC_TOL_MS;
-  if(LEVEL&&LEVEL.shot){ document.getElementById("hint").innerHTML=tr("hint_shot")+(axisPts()?" "+tr("hint_axis"):""); return; }
-  document.getElementById("hint").innerHTML=tr("hint")+(hasRF?" "+tr("hint_rf"):"")+(hasExit?" "+tr("hint_exit"):"")+((LEVEL&&LEVEL.sync)?" "+tr("hint_sync")(tol,(LEVEL.fps||25)):"");
+  const shot=(LEVEL&&LEVEL.shot)?tr("hint_shot")+(axisPts()?" "+tr("hint_axis"):""):"";
+  if(shot&&!hasCable()){ document.getElementById("hint").innerHTML=shot; return; }
+  document.getElementById("hint").innerHTML=(shot?shot+" ":"")+tr("hint")+(hasRF?" "+tr("hint_rf"):"")+(hasExit?" "+tr("hint_exit"):"")+((LEVEL&&LEVEL.sync)?" "+tr("hint_sync")(tol,(LEVEL.fps||25)):"");
 }
 function applyLang(){
   document.querySelectorAll("[data-i18n]").forEach(e=>{ e.textContent=tr(e.dataset.i18n); });
