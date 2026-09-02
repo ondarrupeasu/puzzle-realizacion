@@ -183,6 +183,7 @@ const STR = {
     meta_conv:"€ · toca cámara o entrada", meta_ramp:"€ · toca un pasillo (lo comparten varias cámaras)", meta_rx:"toca cerca de la cámara inalámbrica (dentro del alcance RF)",
     dec_name:"Decimator", meta_dec:"€ · toca una cámara (invierte HD↔4K)",
     hint:`Elige el <b>tipo de cable</b> y arrastra desde el <b>objetivo</b> de la cámara a una <b>entrada</b> de la mesa. <b>Tira del cable</b> para curvarlo (suma metros); rodea las butacas (los pasillos se cruzan libres). Si el nivel trae conversores, colócalos tocando cámara o entrada — ojo al sentido. El juego <b>no te avisa</b> si algo no encaja: pulsa <b>Ya lo tengo</b> para validar. Pellizca para acercar.`,
+    hint_rf:`📡 <b>Inalámbrica</b>: el receptor (RX) necesita <b>alcance</b> Y <b>línea de vista</b> — la RF no atraviesa torres, columnas ni muros (el público sí la deja pasar). Colócalo donde se pueda acceder.`,
     hint_exit:`⛔ <b>Vía de evacuación</b> (roja): normativa de seguridad. El cable <b>no la cruza nunca</b>, ni con pasacables — rodéala. Tampoco se coloca ahí una cámara ni un receptor.`,
     m_notconn:n=>`${n}: sin conectar a la mesa.`,
     m_hard:n=>`${n}: el cable cruza las butacas, el foso u otro obstáculo.`,
@@ -198,10 +199,11 @@ const STR = {
     m_resmesa:(n,r,mr)=>`${n}: la señal llega en ${r} y la mesa trabaja en ${mr} (usa un Decimator).`,
     m_norx:n=>`${n}: sin receptor (RX) colocado.`,
     m_range:(n,d,r)=>`${n}: el receptor está a ${d} m, fuera del alcance RF (${r} m).`,
+    m_los:(n,o)=>`${n}: no hay línea de vista con el receptor — ${o||"una estructura"} se interpone. La RF no atraviesa estructuras.`,
     w_ok:n=>`Las ${n} cámaras entregan señal dentro de presupuesto.`,
     w_cost:(c,tt,cv)=>`Coste: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} conversores.`,
     w_score:s=>`Puntuación (presupuesto restante): <b style="color:var(--txt)">${s} €</b>.`,
-    labels:{ "ESCENARIO":"ESCENARIO","FOSO":"FOSO","BUTACAS":"BUTACAS","PASILLO CENTRAL":"PASILLO CENTRAL","PASILLO":"PASILLO","COLUMNA":"COLUMNA","TORRE PA":"TORRE PA","BARRERA":"BARRERA","PÚBLICO (DE PIE)":"PÚBLICO (DE PIE)","DECORADO / SET":"DECORADO / SET","MESA PLATÓ":"MESA PLATÓ","FOCO":"FOCO","CABINA":"CABINA","CONTROL":"CONTROL","SALIDA DE EMERGENCIA":"SALIDA DE EMERGENCIA","VÍA DE EVACUACIÓN":"VÍA DE EVACUACIÓN","SALIDA":"SALIDA" },
+    labels:{ "ESCENARIO":"ESCENARIO","FOSO":"FOSO","BUTACAS":"BUTACAS","PASILLO CENTRAL":"PASILLO CENTRAL","PASILLO":"PASILLO","COLUMNA":"COLUMNA","TORRE PA":"TORRE PA","TORRE FOH":"TORRE FOH","BARRERA":"BARRERA","PÚBLICO (DE PIE)":"PÚBLICO (DE PIE)","DECORADO / SET":"DECORADO / SET","MESA PLATÓ":"MESA PLATÓ","FOCO":"FOCO","CABINA":"CABINA","CONTROL":"CONTROL","SALIDA DE EMERGENCIA":"SALIDA DE EMERGENCIA","VÍA DE EVACUACIÓN":"VÍA DE EVACUACIÓN","SALIDA":"SALIDA" },
     cables:{ "Fibra":"Fibra" },
     venues:{ teatro:"Teatro", concierto:"Concierto", setTV:"Set de TV" },
   },
@@ -218,6 +220,7 @@ const STR = {
     meta_conv:"€ · tap a camera or input", meta_ramp:"€ · tap an aisle (shared by cameras)", meta_rx:"tap near the wireless camera (within RF range)",
     dec_name:"Decimator", meta_dec:"€ · tap a camera (flips HD↔4K)",
     hint:`Pick a <b>cable type</b> and drag from the camera's <b>output</b> to a desk <b>input</b>. <b>Pull the cable</b> to bend it (adds metres); route around the seating (aisles are free to cross). If the level has converters, place them by tapping a camera or input — mind the direction. The game <b>won't warn you</b> if something doesn't fit: press <b>I'm done</b> to validate. Pinch to zoom.`,
+    hint_rf:`📡 <b>Wireless</b>: the receiver (RX) needs <b>range</b> AND <b>line of sight</b> — RF doesn't go through towers, columns or walls (the crowd does let it through). Place it somewhere reachable.`,
     hint_exit:`⛔ <b>Escape route</b> (red): safety regulation. The cable <b>never</b> crosses it, not even with a ramp — route around. No camera or receiver may sit there either.`,
     m_notconn:n=>`${n}: not connected to the desk.`,
     m_hard:n=>`${n}: the cable crosses the seating, the pit or another obstacle.`,
@@ -233,10 +236,11 @@ const STR = {
     m_resmesa:(n,r,mr)=>`${n}: the signal arrives in ${r} and the desk works in ${mr} (use a Decimator).`,
     m_norx:n=>`${n}: no receiver (RX) placed.`,
     m_range:(n,d,r)=>`${n}: the receiver is ${d} m away, out of RF range (${r} m).`,
+    m_los:(n,o)=>`${n}: no line of sight to the receiver — ${o||"a structure"} is in the way. RF doesn't go through structures.`,
     w_ok:n=>`All ${n} cameras deliver signal within budget.`,
     w_cost:(c,tt,cv)=>`Cost: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} converters.`,
     w_score:s=>`Score (budget left): <b style="color:var(--txt)">${s} €</b>.`,
-    labels:{ "ESCENARIO":"STAGE","FOSO":"PIT","BUTACAS":"SEATING","PASILLO CENTRAL":"CENTER AISLE","PASILLO":"AISLE","COLUMNA":"COLUMN","TORRE PA":"PA TOWER","BARRERA":"BARRIER","PÚBLICO (DE PIE)":"STANDING CROWD","DECORADO / SET":"SET","MESA PLATÓ":"PRESENTER DESK","FOCO":"FLOOR LIGHT","CABINA":"BOOTH","CONTROL":"CONTROL ROOM","SALIDA DE EMERGENCIA":"EMERGENCY EXIT","VÍA DE EVACUACIÓN":"ESCAPE ROUTE","SALIDA":"EXIT" },
+    labels:{ "ESCENARIO":"STAGE","FOSO":"PIT","BUTACAS":"SEATING","PASILLO CENTRAL":"CENTER AISLE","PASILLO":"AISLE","COLUMNA":"COLUMN","TORRE PA":"PA TOWER","TORRE FOH":"FOH TOWER","BARRERA":"BARRIER","PÚBLICO (DE PIE)":"STANDING CROWD","DECORADO / SET":"SET","MESA PLATÓ":"PRESENTER DESK","FOCO":"FLOOR LIGHT","CABINA":"BOOTH","CONTROL":"CONTROL ROOM","SALIDA DE EMERGENCIA":"EMERGENCY EXIT","VÍA DE EVACUACIÓN":"ESCAPE ROUTE","SALIDA":"EXIT" },
     cables:{ "Fibra":"Fiber" },
     venues:{ teatro:"Theatre", concierto:"Concert", setTV:"TV Set" },
   },
@@ -253,7 +257,8 @@ const STR = {
     meta_conv:"€ · ukitu kamera bat edo sarrera bat", meta_ramp:"€ · ukitu korridore bat (kamerek partekatzen dute)", meta_rx:"ukitu haririk gabeko kameratik gertu (RF irismenaren barruan)",
     dec_name:"Decimator", meta_dec:"€ · ukitu kamera bat (HD↔4K trukatzen du)",
     hint:`Aukeratu <b>kable mota</b> eta arrastatu kameraren <b>objektibotik</b> mahaiaren <b>sarrera</b> batera. <b>Tira egin kableari</b> okertzeko (metroak batzen ditu); saihestu besaulkiak (korridoreak libre gurutza daitezke). Mailak bihurgailuak baditu, jarri kamera edo sarrera ukituz — kontuz noranzkoarekin. Jokoak <b>ez dizu abisatzen</b> zerbait ondo ez badago: sakatu <b>Prest nago</b> balidatzeko. Atximurkatu gerturatzeko.`,
-    hint_exit:`⛔ <b>Ebakuazio-bidea</b> (gorria): segurtasun-araudia. Kableak <b>ez du inoiz gurutzatzen</b>, ezta arrapalarekin ere — saihestu. Ezin da han kamerarik ez hargailurik jarri.`,
+    hint_rf:`📡 <b>Haririk gabekoa</b>: hartzaileak (RX) <b>irismena</b> ETA <b>ikuspegi-lerroa</b> behar ditu — RFak ez ditu dorreak, zutabeak edo hormak zeharkatzen (jendeak bai uzten dio pasatzen). Jarri sarbidea dagoen lekuan.`,
+    hint_exit:`⛔ <b>Ebakuazio-bidea</b> (gorria): segurtasun-araudia. Kableak <b>ez du inoiz gurutzatzen</b>, ezta arrapalarekin ere — saihestu. Ezin da han kamerarik ez hartzailerik jarri.`,
     m_notconn:n=>`${n}: mahaira konektatu gabe.`,
     m_hard:n=>`${n}: kableak besaulkiak, hobia edo beste oztopo bat gurutzatzen du.`,
     m_aisle:n=>`${n}: kableak korridore bat gurutzatzen du kable-arrapalarik gabe (oinazpiko kablea).`,
@@ -268,10 +273,11 @@ const STR = {
     m_resmesa:(n,r,mr)=>`${n}: seinalea ${r}-n iristen da eta mahaiak ${mr}-n lan egiten du (erabili Decimator bat).`,
     m_norx:n=>`${n}: hartzailerik (RX) jarri gabe.`,
     m_range:(n,d,r)=>`${n}: hartzailea ${d} m-ra dago, RF irismenetik kanpo (${r} m).`,
+    m_los:(n,o)=>`${n}: ez dago ikuspegi-lerrorik hartzailearekin — ${o||"egitura bat"} tartean dago. RFak ez ditu egiturak zeharkatzen.`,
     w_ok:n=>`${n} kamerek seinalea ematen dute aurrekontuaren barruan.`,
     w_cost:(c,tt,cv)=>`Kostua: <b style="color:var(--txt)">${c} €</b> · ${tt} m · ${cv} bihurgailu.`,
     w_score:s=>`Puntuazioa (gelditzen den aurrekontua): <b style="color:var(--txt)">${s} €</b>.`,
-    labels:{ "ESCENARIO":"OHOLTZA","FOSO":"HOBIA","BUTACAS":"BESAULKIAK","PASILLO CENTRAL":"ERDIKO KORRIDOREA","PASILLO":"KORRIDOREA","COLUMNA":"ZUTABEA","TORRE PA":"PA DORREA","BARRERA":"HESIA","PÚBLICO (DE PIE)":"JENDEA (ZUTIK)","DECORADO / SET":"DEKORATUA / SETA","MESA PLATÓ":"PLATOKO MAHAIA","FOCO":"FOKUA","CABINA":"KABINA","CONTROL":"KONTROLA","SALIDA DE EMERGENCIA":"LARRIALDIKO IRTEERA","VÍA DE EVACUACIÓN":"EBAKUAZIO-BIDEA","SALIDA":"IRTEERA" },
+    labels:{ "ESCENARIO":"OHOLTZA","FOSO":"HOBIA","BUTACAS":"BESAULKIAK","PASILLO CENTRAL":"ERDIKO KORRIDOREA","PASILLO":"KORRIDOREA","COLUMNA":"ZUTABEA","TORRE PA":"PA DORREA","TORRE FOH":"FOH DORREA","BARRERA":"HESIA","PÚBLICO (DE PIE)":"JENDEA (ZUTIK)","DECORADO / SET":"DEKORATUA / SETA","MESA PLATÓ":"PLATOKO MAHAIA","FOCO":"FOKUA","CABINA":"KABINA","CONTROL":"KONTROLA","SALIDA DE EMERGENCIA":"LARRIALDIKO IRTEERA","VÍA DE EVACUACIÓN":"EBAKUAZIO-BIDEA","SALIDA":"IRTEERA" },
     cables:{ "Fibra":"Zuntza" },
     venues:{ teatro:"Antzokia", concierto:"Kontzertua", setTV:"TB Platoa" },
   },
@@ -436,9 +442,9 @@ const CONCIERTO_N1 = {
 
 const CONCIERTO_N2 = {
   nombre:  { es:"Concierto · Nivel 2", en:"Concert · Level 2", eu:"Kontzertua · 2. maila" },
-  encargo: { es:"Entra una cámara inalámbrica (steadicam en el foso): no sale cable de ella. Coloca su receptor (RX) dentro del alcance RF y cablea desde el RX a la cabina. El resto de cámaras, como antes. Cuidado con la vía de evacuación: ni el cable ni el RX pueden ocuparla.",
-             en:"A wireless camera joins (steadicam in the pit): no cable comes off it. Place its receiver (RX) within RF range and cable from the RX to the booth. The rest of the cameras, as before. Mind the escape route: neither the cable nor the RX may sit on it.",
-             eu:"Haririk gabeko kamera bat gehitzen da (steadicam-a hobian): ez zaio kablerik ateratzen. Jarri bere hartzailea (RX) RF irismenaren barruan eta kableatu RXtik kabinara. Gainerako kamerak, lehen bezala. Kontuz ebakuazio-bidearekin: ez kableak ez RXak ezin dute hura okupatu." },
+  encargo: { es:"Entra una cámara inalámbrica (steadicam en el foso): no sale cable de ella. Coloca su receptor (RX) dentro del alcance RF y cablea desde el RX a la cabina. El resto de cámaras, como antes. El RX necesita alcance Y línea de vista: la torre de FOH tapa la RF en línea recta, así que descéntralo. Cuidado también con la vía de evacuación: ni el cable ni el RX pueden ocuparla.",
+             en:"A wireless camera joins (steadicam in the pit): no cable comes off it. Place its receiver (RX) within RF range and cable from the RX to the booth. The rest of the cameras, as before. The RX needs range AND line of sight: the FOH tower blocks RF in a straight line, so offset it. Mind the escape route too: neither the cable nor the RX may sit on it.",
+             eu:"Haririk gabeko kamera bat gehitzen da (steadicam-a hobian): ez zaio kablerik ateratzen. Jarri bere hartzailea (RX) RF irismenaren barruan eta kableatu RXtik kabinara. Gainerako kamerak, lehen bezala. RXak irismena ETA ikuspegi-lerroa behar ditu: FOH dorreak RFa oztopatzen du zuzenean, beraz deszentratu ezazu. Kontuz ebakuazio-bidearekin ere: ez kableak ez RXak ezin dute hura okupatu." },
   planoM:  { w:150, h:90 },
   escalaPxM: 7.5,
   mesa: { x:138, y:45, inputs:4, inFmt:"sdi", faces:"left" },
@@ -454,6 +460,7 @@ const CONCIERTO_N2 = {
     { shape:"rect",   kind:"seating", x:72,  y:45, w:76, h:62, label:"PÚBLICO (DE PIE)" },
     { shape:"circle", kind:"column",  x:60,  y:10, r:3, label:"TORRE PA" },
     { shape:"circle", kind:"column",  x:60,  y:80, r:3, label:"TORRE PA" },
+    { shape:"circle", kind:"column",  x:88,  y:45, r:4, label:"TORRE FOH" },   // control de sonido en pista: tapa la RF en línea recta
     { shape:"rect",   kind:"walk",    x:126, y:45, w:8,  h:74, label:"PASILLO" },
     { shape:"rect",   kind:"exit",    x:123, y:58, w:14, h:6, label:"SALIDA" },   // vía de evacuación hacia la puerta lateral
   ],
@@ -559,9 +566,9 @@ const SETTV_N3 = {
 
 const CONCIERTO_N3 = {
   nombre:  { es:"Concierto · Nivel 3", en:"Concert · Level 3", eu:"Kontzertua · 3. maila" },
-  encargo: { es:"Arena enorme: distancias descomunales. Las cámaras del foso solo llegan por FIBRA; las de fondo, por SDI. Y una grúa inalámbrica en pista: coloca su RX dentro del alcance. Presupuesto grande, pero ojo.",
-             en:"Huge arena: massive distances. The pit cameras only reach on FIBRE; the rear ones on SDI. Plus a wireless jib on the floor: place its RX within range. Big budget, but be careful.",
-             eu:"Areto erraldoia: distantzia izugarriak. Hobiko kamerak ZUNTZAren bidez baino ez dira iristen; atzekoak SDI bidez. Gainera, haririk gabeko garabi bat pistan: jarri bere RX irismenaren barruan. Aurrekontu handia, baina kontuz." },
+  encargo: { es:"Arena enorme: distancias descomunales. Las cámaras del foso solo llegan por FIBRA; las de fondo, por SDI. Y una grúa inalámbrica en pista: coloca su RX dentro del alcance y con línea de vista (la torre de FOH se interpone). Presupuesto grande, pero ojo.",
+             en:"Huge arena: massive distances. The pit cameras only reach on FIBRE; the rear ones on SDI. Plus a wireless jib on the floor: place its RX within range and with line of sight (the FOH tower gets in the way). Big budget, but be careful.",
+             eu:"Areto erraldoia: distantzia izugarriak. Hobiko kamerak ZUNTZAren bidez baino ez dira iristen; atzekoak SDI bidez. Gainera, haririk gabeko garabi bat pistan: jarri bere RX irismenaren barruan eta ikuspegi-lerroarekin (FOH dorrea tartean dago). Aurrekontu handia, baina kontuz." },
   planoM:  { w:210, h:120 },
   escalaPxM: 5.2,
   mesa: { x:198, y:60, inputs:5, inFmt:"sdi", faces:"left" },
@@ -580,6 +587,7 @@ const CONCIERTO_N3 = {
     { shape:"circle", kind:"column",  x:75,  y:114, r:4, label:"TORRE PA" },
     { shape:"circle", kind:"column",  x:150, y:6,   r:4, label:"TORRE PA" },
     { shape:"circle", kind:"column",  x:150, y:114, r:4, label:"TORRE PA" },
+    { shape:"circle", kind:"column",  x:150, y:60,  r:5, label:"TORRE FOH" },   // control de sonido en pista: tapa la RF en línea recta
     { shape:"rect",   kind:"walk",    x:186, y:60, w:6,   h:104, label:"PASILLO" },
   ],
   rampEur: 120, rampW: 6,
@@ -683,6 +691,19 @@ function zoneBlock(z){                             // cómo se comporta cada zon
   if(z.kind==="aisle") return "ramp";              // cruzable con pasacables (de momento sin usar)
   if(z.kind==="stage"||z.kind==="walk"||z.kind==="decor") return "none";  // decor / pasillo libre: no bloquea (p.ej. focos de suelo)
   return "hard";                                   // pit, seating, wall, column…
+}
+
+function rfBlockZone(z){                           // ¿esta zona corta la RF? (estructuras sólidas; el público no)
+  if(z.rf==="block") return true;                  // marca explícita en los datos del nivel
+  if(z.rf==="clear") return false;
+  return z.kind==="column"||z.kind==="wall";       // torres de PA/FOH, columnas, muros
+}
+function rfBlocked(a,b){                           // ¿hay algo entre la cámara inalámbrica y su RX?
+  for(const z of (LEVEL.zones||[])){
+    if(!rfBlockZone(z))continue;
+    if(z.shape==="circle"?segCircle(a,b,z,z.r):segRect(a,b,z)) return z;
+  }
+  return null;
 }
 
 function inForbidZone(x,y){                        // ¿el punto cae en una vía de evacuación?
@@ -895,7 +916,7 @@ function redrawCables(){
   // cámaras inalámbricas: enlace RF + receptor RX (con su puerto de salida)
   cams.forEach((cam,ci)=>{
     if(!cam.wireless || !rx[ci]) return;
-    const r=rx[ci], d=dist(cam,r), bad=locked && d>cam.range;
+    const r=rx[ci], d=dist(cam,r), bad=locked && (d>cam.range || rfBlocked(cam,r));
     const col=bad?css("--red"):css("--amber");
     el("line",{x1:m(cam.x),y1:m(cam.y),x2:m(r.x),y2:m(r.y),stroke:col,"stroke-width":1.5,"stroke-dasharray":"2 4","pointer-events":"none"},gCables);
     // distancia RF en metros (etiqueta en el enlace)
@@ -1001,7 +1022,7 @@ svg.addEventListener("pointerdown",e=>{
     const p=toSvg(e), mx=p.x/S, my=p.y/S;
     let ci=-1,bd=1e9;
     cams.forEach((c,i)=>{ if(c.wireless){ const d=Math.hypot(mx-c.x,my-c.y); if(d<bd){bd=d;ci=i;} } });
-    if(ci>=0){ if(!inForbidZone(mx,my)){ rx[ci]={x:mx,y:my}; redrawCables(); updateHUD(); } return; }
+    if(ci>=0){ if(!inHardZone(mx,my)){ rx[ci]={x:mx,y:my}; redrawCables(); updateHUD(); } return; }   // el RX va donde se pueda acceder
     drag={kind:"pan",sx:e.clientX,sy:e.clientY,tx0:zoom.tx,ty0:zoom.ty}; return;
   }
   if(mode==="dec"){                                     // poner/quitar Decimator en la cámara más cercana
@@ -1105,6 +1126,8 @@ function validate(){
       if(!rx[ci]){ problemas.push(tr('m_norx')(name)); return; }
       const dRF=dist(cam,rx[ci]);
       if(dRF>cam.range) problemas.push(tr('m_range')(name, dRF.toFixed(0), cam.range));
+      const obs=rfBlocked(cam,rx[ci]);
+      if(obs) problemas.push(tr('m_los')(name, tl(obs.label||"")));
     }
     if(!c){ problemas.push(tr('m_notconn')(name)); return; }
     const ct=LEVEL.cableTypes[c.type], len=pathLen(ci);
@@ -1251,9 +1274,10 @@ function reset(){
   redrawCables(); updateHUD();
 }
 
-function updateHint(){                          // el aviso de normativa solo sale si el nivel tiene vía de evacuación
+function updateHint(){                          // cada aviso solo sale si el nivel lo usa
   const hasExit=((LEVEL&&LEVEL.zones)||[]).some(z=>zoneBlock(z)==="forbid");
-  document.getElementById("hint").innerHTML=tr("hint")+(hasExit?" "+tr("hint_exit"):"");
+  const hasRF=(LEVEL?cams:[]).some(c=>c.wireless);
+  document.getElementById("hint").innerHTML=tr("hint")+(hasRF?" "+tr("hint_rf"):"")+(hasExit?" "+tr("hint_exit"):"");
 }
 function applyLang(){
   document.querySelectorAll("[data-i18n]").forEach(e=>{ e.textContent=tr(e.dataset.i18n); });
