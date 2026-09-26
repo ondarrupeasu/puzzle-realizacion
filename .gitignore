@@ -1,0 +1,7 @@
+.DS_Store
+.claude/
+.env.deploy
+SESSION_PROMPT.md
+AULA-INMERSIVA-preguntas.md
+MIGRACION-infomaniak.md
+_site/
