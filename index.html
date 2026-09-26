@@ -21,8 +21,10 @@
     --mono:'SF Mono',ui-monospace,'Roboto Mono',Menlo,Consolas,monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--mono);overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
-  #app{display:flex;height:100%;gap:1px;background:var(--line)}
+  html,body{height:100%;background:var(--bg);color:var(--txt);font-family:var(--mono);overflow:hidden;overscroll-behavior:none;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  /* anclado al viewport: si el navegador muestra u oculta su barra, el alto NO cambia
+     (en las pantallas del aula ese reflow reescalaba el plano y parecía un zoom) */
+  #app{display:flex;position:fixed;inset:0;gap:1px;background:var(--line)}
   button{font-family:var(--mono);cursor:pointer}
   .lang{display:inline-flex;border:1px solid var(--line);border-radius:5px;overflow:hidden;flex:0 0 auto}
   .langbtn{background:transparent;color:var(--dim);border:0;padding:6px 9px;font-size:10px;letter-spacing:.1em}
@@ -103,6 +105,7 @@
       </div>
       <div style="display:flex;gap:6px;align-items:flex-start">
         <span class="lang"><button class="langbtn" data-lang="es">ES</button><button class="langbtn" data-lang="en">EN</button><button class="langbtn" data-lang="eu">EU</button></span>
+        <button id="fs" title="Pantalla completa">⛶</button>
         <button id="tomenu" title="Menu">≡</button>
       </div>
     </div>
@@ -194,6 +197,7 @@ const STR = {
     meta_conv:"€ · toca cámara o entrada", meta_ramp:"€ · toca un pasillo (lo comparten varias cámaras)", meta_rx:"toca cerca de la cámara inalámbrica (dentro del alcance RF)",
     dec_name:"Decimator", meta_dec:"€ · toca una cámara (invierte HD↔4K)",
     fs_name:"Frame sync (mesa)", meta_fs:"€ · alinea todas las entradas", lat_synced:"sincronizado",
+    fs_enter:"Pantalla completa", fs_exit:"Salir de pantalla completa",
     inv_lens:"Inventario · óptica", meta_lens:"de campo horizontal", plan_title:"Pauta de realización",
     shot_none:"sin sujeto en cuadro",
     hint_shot:`🎥 <b>Encuadres</b>: toca una cámara para seleccionarla, <b>arrastra el tirador</b> de su cono para orientarla y muévela dentro de su área. La óptica abre o cierra el ángulo: el <b>ancho de campo</b> que ves depende de la distancia y del objetivo. Planos: <b>PP</b> ≤0,7 m · <b>PM</b> ≤1,3 · <b>PA</b> ≤1,9 · <b>PE</b> ≤3 · <b>PG</b> >3.`,
@@ -249,6 +253,7 @@ const STR = {
     meta_conv:"€ · tap a camera or input", meta_ramp:"€ · tap an aisle (shared by cameras)", meta_rx:"tap near the wireless camera (within RF range)",
     dec_name:"Decimator", meta_dec:"€ · tap a camera (flips HD↔4K)",
     fs_name:"Frame sync (desk)", meta_fs:"€ · aligns every input", lat_synced:"in sync",
+    fs_enter:"Full screen", fs_exit:"Exit full screen",
     inv_lens:"Inventory · lens", meta_lens:"horizontal field", plan_title:"Shot list",
     shot_none:"no subject in frame",
     hint_shot:`🎥 <b>Framing</b>: tap a camera to select it, <b>drag the handle</b> on its cone to aim it, and move it inside its area. The lens opens or closes the angle: the <b>field width</b> you see depends on distance and lens. Shots: <b>CU</b> ≤0.7 m · <b>MS</b> ≤1.3 · <b>MLS</b> ≤1.9 · <b>FS</b> ≤3 · <b>WS</b> >3.`,
@@ -304,6 +309,7 @@ const STR = {
     meta_conv:"€ · ukitu kamera bat edo sarrera bat", meta_ramp:"€ · ukitu korridore bat (kamerek partekatzen dute)", meta_rx:"ukitu haririk gabeko kameratik gertu (RF irismenaren barruan)",
     dec_name:"Decimator", meta_dec:"€ · ukitu kamera bat (HD↔4K trukatzen du)",
     fs_name:"Frame sync (mahaia)", meta_fs:"€ · sarrera guztiak lerrokatzen ditu", lat_synced:"sinkronizatuta",
+    fs_enter:"Pantaila osoa", fs_exit:"Irten pantaila osotik",
     inv_lens:"Inbentarioa · optika", meta_lens:"eremu horizontala", plan_title:"Errealizazio-pauta",
     shot_none:"ez dago subjekturik koadroan",
     hint_shot:`🎥 <b>Enkoadreak</b>: ukitu kamera bat hautatzeko, <b>arrastatu bere konoaren heldulekua</b> orientatzeko, eta mugitu bere eremuaren barruan. Optikak angelua ireki edo ixten du: ikusten duzun <b>eremu-zabalera</b> distantziaren eta objektiboaren araberakoa da. Planoak: <b>PP</b> ≤0,7 m · <b>PM</b> ≤1,3 · <b>PA</b> ≤1,9 · <b>PE</b> ≤3 · <b>PG</b> >3.`,
@@ -1792,6 +1798,7 @@ function applyLang(){
   document.querySelectorAll("[data-i18n]").forEach(e=>{ e.textContent=tr(e.dataset.i18n); });
   updateHint();
   document.querySelectorAll(".langbtn").forEach(b=>b.classList.toggle("on", b.dataset.lang===LANG));
+  document.getElementById("fs").title=tr(document.fullscreenElement?'fs_exit':'fs_enter');
   buildMenu();
   if(LEVEL){                                   // re-renderiza el nivel cargado en el nuevo idioma
     document.getElementById("nivel").textContent=pick(LEVEL.nombre);
@@ -1806,6 +1813,14 @@ document.getElementById("win-again").addEventListener("click",reset);
 document.getElementById("validate").addEventListener("click",()=>{if(LEVEL)validate();});
 document.getElementById("win-review").addEventListener("click",()=>document.getElementById("win").classList.remove("show"));
 document.getElementById("tomenu").addEventListener("click",()=>document.getElementById("menu").classList.add("show"));
+document.getElementById("fs").addEventListener("click",()=>{        // pantalla completa: en las pizarras del aula, la barra del navegador reescala el plano
+  const d=document, e=d.documentElement;
+  if(d.fullscreenElement||d.webkitFullscreenElement){ (d.exitFullscreen||d.webkitExitFullscreen).call(d); }
+  else{ (e.requestFullscreen||e.webkitRequestFullscreen).call(e).catch(()=>{}); }
+});
+document.addEventListener("fullscreenchange",()=>{
+  document.getElementById("fs").title=tr(document.fullscreenElement?'fs_exit':'fs_enter');
+});
 document.querySelectorAll(".langbtn").forEach(b=>b.addEventListener("click",()=>setLang(b.dataset.lang)));
 applyLang();
 </script>
