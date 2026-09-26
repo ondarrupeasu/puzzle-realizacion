@@ -24,13 +24,30 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      H: ${{ secrets.FTP_HOST }}
     steps:
+      # Mientras no existan los secrets, el despliegue se salta en verde:
+      # así no llega un correo de fallo en cada push antes de la migración.
+      - name: ¿Hay credenciales?
+        id: chk
+        run: |
+          if [ -z "${H:-}" ]; then
+            echo "listo=no" >> "$GITHUB_OUTPUT"
+            echo "Sin secrets FTP todavía: no hay nada que desplegar. Ver MIGRACION-infomaniak.md"
+          else
+            echo "listo=si" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/checkout@v4
+        if: steps.chk.outputs.listo == 'si'
 
       - name: Instalar lftp
+        if: steps.chk.outputs.listo == 'si'
         run: sudo apt-get update && sudo apt-get install -y lftp
 
       - name: Preparar lo que se publica
+        if: steps.chk.outputs.listo == 'si'
         run: |
           mkdir -p _site
           cp index.html webar.html realizacion-nivel1.html _site/
@@ -39,8 +56,8 @@ jobs:
           ls -la _site
 
       - name: Subir por FTPS
+        if: steps.chk.outputs.listo == 'si'
         env:
-          H: ${{ secrets.FTP_HOST }}
           U: ${{ secrets.FTP_USER }}
           P: ${{ secrets.FTP_PASSWORD }}
           D: ${{ secrets.FTP_DIR }}
